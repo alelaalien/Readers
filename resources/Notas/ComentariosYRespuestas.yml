@@ -1,0 +1,35 @@
+
+1.COMENTARIOS Y RESPUESTAS.
+
+pila a los comentarios.  ============hecho=============
+pila a los replies.   ============hecho=============
+
+el cambio de poema debe hacer un dispatch a los comentarios y replies.
+
+paneles de edicion:
+
+editar: 
+    -abrir cuadro de edicion ============hecho=============
+        -cerrar panel de opciones ============hecho=============
+            -descartar cambios ============hecho=============
+                -cerrar panel de ediciones ============hecho=============
+            -se actualiza el contenido ============hecho=============
+                -cerrar panel de ediciones ============hecho=============
+eliminar:
+    -abrir modal de confirmacion
+        -descartar
+            -cerrar panel de ediciones
+            -cerrar modal
+        -confirmar
+            -cerrar panel de ediciones
+            -cerrar modal
+            -eliminar registro
+denunciar:
+    -abrir modal con formulario
+        -aceptar
+            -crear registro de denuncia
+        -cancelar
+            -cerrar modal
+            -cerrar panel de ediciones
+cerrar:
+    -cerrar panel de ediciones
