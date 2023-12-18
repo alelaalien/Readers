@@ -27,11 +27,21 @@ Route::middleware('auth')->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 
   Route::resource('poems', PoemController::class)->only('store', 'update', 'destroy');
-  Route::resource('follow', UserFollowingController::class)->only('addFollow');
+  
 
 });
-  
-Route::get('poems',  [PoemController::class, 'poems.index'] )->name('poems');
+use App\Http\Middleware\CorsMiddleware;
+ 
+    // Aquí defines tus rutas
+   Route::post('/follow', [UserFollowingController::class, 'addFollow'])->name('follow');
+    // O puedes agregar rutas a un controlador específico
+ 
+
+    Route::get('/csrf-token', function() {
+        return response()->json(['csrf_token' => csrf_token()]);
+    });
+    
+Route::get('poems',  [PoemController::class, 'index'] )->name('poems');
 
 
 require __DIR__.'/auth.php';

@@ -10,7 +10,10 @@ class UserFollowingController extends Controller
 {
     
     public function addFollow(Request $request){
-        return Inertia::render('Poems/poems');
+        
+        // $data = new UserFollowing();
+        // $data->follower_id
+        return response()->json(['data' => 'ok:)']);
     }
     public function show(UserFollowing $userFollowing)
     {

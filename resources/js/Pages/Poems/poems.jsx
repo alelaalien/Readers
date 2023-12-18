@@ -3,7 +3,7 @@ import Guest from '@/Layouts/GuestLayout';
 import ReactionBar from '@/Components/ReactionBar';
  
 
-export default function poems({ auth, poem= null}) {
+export default function poems({ auth, poem }) {
  
     const divStyle = {
        height: '500px' 
@@ -23,7 +23,7 @@ export default function poems({ auth, poem= null}) {
                     <h1 className="font-bold text-2xl p-4">{ poem.title }</h1>
                     <p className="whitespace-pre-line">{ poem.content }</p>
                     
-                    <ReactionBar   auth={auth}></ReactionBar>
+                    <ReactionBar poem={poem}  auth={auth}></ReactionBar>
 
                     </div>
                 </div>

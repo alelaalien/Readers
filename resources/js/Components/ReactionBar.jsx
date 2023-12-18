@@ -1,13 +1,11 @@
 import React, { useState,useEffect } from "react";
 import { Form } from "react-bootstrap";
 
-export default function ReactionBar({auth}) {
+export default function ReactionBar({auth, poem}) {
   const [heartChecked, setHeartChecked] = useState(false);
   const [favoritesChecked, setFavoritesChecked] = useState(false);
   const [followUserChecked, setFollowUserChecked] = useState(false);
-
  
-
   const handleFavoritesChange = () => {
     setFavoritesChecked(!favoritesChecked);
   };
@@ -22,25 +20,39 @@ export default function ReactionBar({auth}) {
   };
  
   const handleSubmit = async (e) => {
+ 
     e.preventDefault();
-  let formData = new FormData();
-  formData.append('a' , 'a');
-    fetch('http://localhost/poems',{
-      method: "POST",
-      headers: { "Access-Control-Allow-Origin": "*","Content-Type": "application/json"   },
-      body: formData,
-  })
-  .then(async(response) => {
-      // status 404 or 500 will set ok to false
-      if (response.ok) {
-          // Success: convert data received & run callback
-          result = await response.json();
-          callback(result);
+ 
+  fetch('http://127.0.0.1:8000/csrf-token')
+    .then(response => {
+      if (!response.ok) {
+        throw new Error('Network response was not ok');
       }
-      else {
-          throw new Error(response.status + " Failed Fetch ");
-      }
-  }).catch(e => console.error('EXCEPTION: ', e))
+      return response.json();
+    })
+    .then(data => {
+      const csrfToken = data.csrf_token;
+      
+      fetch('http://127.0.0.1:8000/follow', {
+          method: 'post',
+          mode: 'cors',
+          credentials: 'same-origin',
+          headers: {'X-CSRF-TOKEN': csrfToken},
+   
+        })
+          .then(response => {
+            console.log(response.ok)
+             
+          })
+          .catch(error => {
+          
+            console.error('Error al realizar la solicitud:', error);
+          });
+    })
+  .catch(error => {
+    console.error('There was a problem with the fetch operation:', error);
+  });
+  
   };
  
   

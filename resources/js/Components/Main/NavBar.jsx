@@ -23,7 +23,7 @@ function NavBar({children}) {
               >
                 
                 <Nav.Link  to="/"  style={{color: 'wheat'}}>Reviews</Nav.Link>
-                <Nav.Link href={route('poems.index')}  style={{color: 'wheat'}}>Poems</Nav.Link>
+                <Nav.Link href={route('poems')}  style={{color: 'wheat'}}>Poems</Nav.Link>
                 {/* <NavDropdown title="Link" id="navbarScrollingDropdown">
                   <NavDropdown.Item href="#action3">Action</NavDropdown.Item>
                   <NavDropdown.Item href="#action4">
