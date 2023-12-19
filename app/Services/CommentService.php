@@ -2,7 +2,8 @@
  
 namespace App\Services;
 
-use App\Models\Comment; 
+use App\Models\Comment;
+use App\Models\Poem;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
@@ -10,10 +11,10 @@ use Illuminate\Validation\ValidationException;
 
 class CommentService {
 
-    public function saveComment($data, $content)
+    public function saveComment($data, $content, $userId, $classType)
     {
         
-        $userId = Auth::id();
+        
     
         $validator = Validator::make([
             'content' => $content,
@@ -22,15 +23,36 @@ class CommentService {
     
         if ($validator->fails()) {
             throw ValidationException::withMessages($validator->errors()->messages());
+            
         }
-    
+        
+
+        switch ($classType) {
+            case 'App\Models\Poem':
+                $item = Poem::findOrFail($data);
+
+            //    return $data;
+           
+                break;
+            
+            default:
+                return 'ay no';
+                break;
+        }
         $comment = new Comment();
         $comment->content = $content;
         $comment->user_id = $userId;
     
-        $data->comments()->save($comment);
-        $data->class = get_class($data);
-        return $data;
+        try {
+             $item->comments()->save($comment);
+
+             return 'ok';
+        } catch (\Throwable $th) {
+            return ['error' => $th];
+        }
+         
+       
+    
     }
 
     public function updateComment($comment, $content)

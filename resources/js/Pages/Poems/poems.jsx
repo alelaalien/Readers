@@ -1,6 +1,7 @@
 import { Link, Head } from '@inertiajs/react';
 import Guest from '@/Layouts/GuestLayout';
 import ReactionBar from '@/Components/ReactionBar';
+import CommentList from '@/Components/CommentsList';
  
 
 export default function poems({ auth, poem }) {
@@ -27,6 +28,8 @@ export default function poems({ auth, poem }) {
 
                     </div>
                 </div>
+ 
+                <CommentList item={poem}></CommentList>
              </div>
          </Guest>
     );

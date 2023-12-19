@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\CommentController;
 use App\Http\Controllers\PoemController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\UserFollowingController; 
@@ -28,6 +29,7 @@ Route::middleware('auth')->group(function () {
 
   Route::resource('poems', PoemController::class)->only('store', 'update', 'destroy');
   
+  
 
 });
 use App\Http\Middleware\CorsMiddleware;
@@ -35,7 +37,7 @@ use App\Http\Middleware\CorsMiddleware;
  
    Route::post('/follow', [UserFollowingController::class, 'addFollow'])->name('follow');
     
- 
+ Route::post('/addComment', [CommentController::class, 'store'])->name('addComment');
 
     Route::get('/csrf-token', function() {
         return response()->json(['csrf_token' => csrf_token()]);

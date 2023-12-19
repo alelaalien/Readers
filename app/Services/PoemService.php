@@ -7,22 +7,7 @@ use Illuminate\Support\Facades\DB;
 
 class PoemService {
 
-    public function getPoemById($id) {
-         
-         return   Poem::select(
-            'poems.title',
-            'poems.author',
-            'poems.id',
-            'poems.content',
-            'users.name',
-            'users.id as user_id',
-            DB::raw('CASE WHEN users.email_verified_at IS NOT NULL THEN TRUE ELSE FALSE END AS verificated')
-        )
-        ->leftJoin('users', 'poems.user_id', '=', 'users.id')
-        ->where('poems.id', $id)
-        ->first();
-    }
-
+  
     public function showPoems($id)
     { 
             return Poem::where('poems.id', $id)

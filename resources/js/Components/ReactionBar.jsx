@@ -12,17 +12,15 @@ export default function ReactionBar({auth, poem}) {
     setFavoritesChecked(!favoritesChecked);
   };
 
-  const handleFollowUserChange = () => {
-    setFollowUserChecked(!followUserChecked);
-  };
+ 
   const handleHeartChange = (e) => {
     
    setHeartChecked(!heartChecked);
     
   };
  
-  const handleSubmitFollow = async (e) => {
- 
+  const handleFollowUserChange = async (e) => {
+  
     e.preventDefault();
  
   fetch('http://127.0.0.1:8000/csrf-token')
@@ -48,7 +46,9 @@ export default function ReactionBar({auth, poem}) {
            return response.json();
              
           }).then(response =>{
-            console.log(response);
+            response == 0 ? 
+            setFollowUserChecked(!followUserChecked):
+            setFollowUserChecked(followUserChecked);
           })
           .catch(error => {
           
@@ -67,6 +67,7 @@ export default function ReactionBar({auth, poem}) {
   return (
     <div className="w-full text-right" style={{ background: "#eee" }}>
       <div className="text-right flex">
+        {/* corazon */}
         <label className="ilike" title="I love it!">
           <input
             type="checkbox"
@@ -79,6 +80,21 @@ export default function ReactionBar({auth, poem}) {
             src="img/assets/heart-icon.png"
             style={{ width: "85%" }}
             alt="Heart Icon"
+          />
+        </label>
+        {/* estrella */}
+        <label className="ilike" title="I love it!">
+          <input
+            type="checkbox"
+            id="favorites"
+            checked={favoritesChecked}
+            onChange={handleFavoritesChange}
+          />
+          <img
+            className={`star-icon ${!favoritesChecked ? "grayscale" : ""}`}
+            src="img/assets/star-icon.png"
+            style={{ width: "85%" }}
+            alt="Star Icon"
           />
         </label>
  

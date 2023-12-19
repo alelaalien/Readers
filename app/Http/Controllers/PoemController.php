@@ -13,7 +13,8 @@ class PoemController extends Controller
     public function index()
     {   
         $id = 1;
-        $poem = app(PoemService::class)->showPoems($id);
+        $poem = app(PoemService::class)->showPoems($id); 
+        $poem->class= get_class($poem);
 
         return Inertia::render('Poems/poems', ['poem' => $poem]);
     }
