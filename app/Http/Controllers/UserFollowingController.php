@@ -1,19 +1,21 @@
 <?php
 
 namespace App\Http\Controllers;
-
-use App\Models\UserFollowing;
+ 
 use Illuminate\Http\Request;
-use Inertia\Inertia;
+use App\Models\UserFollowing;
+use App\Services\UserFollowingService; 
 
 class UserFollowingController extends Controller
 {
     
     public function addFollow(Request $request){
-        
-        // $data = new UserFollowing();
-        // $data->follower_id
-        return response()->json(['data' => 'ok:)']);
+  
+        $follower_id = auth()->user()->id;
+
+        return app(UserFollowingService::class)->isFollowing($request->followed_id, $follower_id);
+   
+ 
     }
     public function show(UserFollowing $userFollowing)
     {

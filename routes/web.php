@@ -32,9 +32,9 @@ Route::middleware('auth')->group(function () {
 });
 use App\Http\Middleware\CorsMiddleware;
  
-    // Aquí defines tus rutas
+ 
    Route::post('/follow', [UserFollowingController::class, 'addFollow'])->name('follow');
-    // O puedes agregar rutas a un controlador específico
+    
  
 
     Route::get('/csrf-token', function() {

@@ -2,6 +2,8 @@ import React, { useState,useEffect } from "react";
 import { Form } from "react-bootstrap";
 
 export default function ReactionBar({auth, poem}) {
+
+ 
   const [heartChecked, setHeartChecked] = useState(false);
   const [favoritesChecked, setFavoritesChecked] = useState(false);
   const [followUserChecked, setFollowUserChecked] = useState(false);
@@ -19,7 +21,7 @@ export default function ReactionBar({auth, poem}) {
     
   };
  
-  const handleSubmit = async (e) => {
+  const handleSubmitFollow = async (e) => {
  
     e.preventDefault();
  
@@ -32,21 +34,25 @@ export default function ReactionBar({auth, poem}) {
     })
     .then(data => {
       const csrfToken = data.csrf_token;
-      
-      fetch('http://127.0.0.1:8000/follow', {
-          method: 'post',
-          mode: 'cors',
-          credentials: 'same-origin',
-          headers: {'X-CSRF-TOKEN': csrfToken},
-   
-        })
+      const requestOptions = {
+        method: 'post',
+       
+        credentials: 'same-origin',
+        headers: {'X-CSRF-TOKEN': csrfToken, 'Content-Type': 'application/json'},
+        body:JSON.stringify({followed_id: poem.user_id })
+
+      }
+      fetch('http://127.0.0.1:8000/follow', requestOptions)
           .then(response => {
-            console.log(response.ok)
              
+           return response.json();
+             
+          }).then(response =>{
+            console.log(response);
           })
           .catch(error => {
           
-            console.error('Error al realizar la solicitud:', error);
+            console.error('Error al realizar la solicitud:/', error);
           });
     })
   .catch(error => {
@@ -75,19 +81,7 @@ export default function ReactionBar({auth, poem}) {
             alt="Heart Icon"
           />
         </label>
-        <form onSubmit={handleSubmit}>
-      <input
-        type="text"
-        name="email" 
-        placeholder="Email"
-      />
-      <input
-        type="password"
-        name="password" 
-        placeholder="Password"
-      />
-      <button type="submit">Login</button>
-    </form>
+ 
       
         <div style={{ width: "54px" }}>
           <div
