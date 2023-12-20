@@ -24,14 +24,12 @@ class PoemService {
             )
             ->with([
             'comments' => function ($query) {
-                $query->select('id', 'user_id', 'content', 'commentable_id', 'commentable_type')
-                    ->selectRaw('DATE_FORMAT(created_at, "%d-%m-%Y %h:%s") as f_created_at')
+                $query->select('id', 'user_id', 'content', 'commentable_id', 'commentable_type', 'created_at')
                     ->orderByDesc('created_at')
                     ->withCount('replies')
                     ->with([
                         'replies' => function ($query) {
-                            $query->select('id', 'user_id', 'content', 'comment_id')
-                                ->selectRaw('DATE_FORMAT(created_at, "%d-%m-%Y %h:%s") as f_created_at')
+                            $query->select('id', 'user_id', 'content', 'comment_id', 'created_at')
                                 ->with('user:id,name,email_verified_at,profile_photo_path as user_pic');
                         },
                         'replies.user:id,name,email_verified_at,profile_photo_path as user_pic',

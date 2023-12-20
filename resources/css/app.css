@@ -1,6 +1,24 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+.btn-drop{
+ 
+  background: #dbdbdb!important;
+  border: 1px solid #c8c8c8!important;
+  width: 35px!important;
+  position: relative!important; 
+  border-radius: 0.65rem!important;
+  float: right!important;
+
+}
+
+.btn-drop:after {
+  content: none!important;
+}
+.card-items div.dropdown{
+  position: absolute;
+  right: 0;
+}
 /* .btnsend{
   color:white!important;
   background: #0e6402!important;

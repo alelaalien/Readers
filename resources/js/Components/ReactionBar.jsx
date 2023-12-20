@@ -77,7 +77,7 @@ export default function ReactionBar({auth, poem}) {
           />
           <img
             className={`heart-icon ${!heartChecked ? "grayscale" : ""}`}
-            src="img/assets/heart-icon.png"
+            src="../img/assets/heart-icon.png"
             style={{ width: "85%" }}
             alt="Heart Icon"
           />
@@ -92,7 +92,7 @@ export default function ReactionBar({auth, poem}) {
           />
           <img
             className={`star-icon ${!favoritesChecked ? "grayscale" : ""}`}
-            src="img/assets/star-icon.png"
+            src="../img/assets/star-icon.png"
             style={{ width: "85%" }}
             alt="Star Icon"
           />
@@ -116,7 +116,7 @@ export default function ReactionBar({auth, poem}) {
             />
             <label className="heart-label"></label>
             <img
-              src="img/users/profile.png"
+              src="../img/users/profile.png"
               className="w-24 h-auto user-image"
               alt="User thumbnail"
               style={{

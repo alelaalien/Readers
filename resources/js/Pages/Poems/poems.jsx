@@ -29,7 +29,7 @@ export default function poems({ auth, poem }) {
                     </div>
                 </div>
  
-                <CommentList item={poem}></CommentList>
+                <CommentList item={poem} key={'list' + poem.id} auth={auth}></CommentList>
              </div>
          </Guest>
     );

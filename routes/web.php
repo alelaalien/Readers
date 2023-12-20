@@ -1,12 +1,15 @@
 <?php
 
-use App\Http\Controllers\CommentController;
-use App\Http\Controllers\PoemController;
-use App\Http\Controllers\ProfileController;
-use App\Http\Controllers\UserFollowingController; 
-use Illuminate\Foundation\Application;
-use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
+use App\Models\Reply;
+use Illuminate\Support\Facades\Route;
+use Illuminate\Foundation\Application;
+use App\Http\Middleware\CorsMiddleware;
+use App\Http\Controllers\PoemController;
+use App\Http\Controllers\ReplyController;
+use App\Http\Controllers\CommentController;
+use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\UserFollowingController;
  
 
 Route::get('/', function () {
@@ -28,16 +31,17 @@ Route::middleware('auth')->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 
   Route::resource('poems', PoemController::class)->only('store', 'update', 'destroy');
-  
+  Route::post('/addComment', [CommentController::class, 'store'])->name('addComment');
+  Route::post('/addReply', [ReplyController::class, 'store'])->name('addReply');
   
 
 });
-use App\Http\Middleware\CorsMiddleware;
+
  
  
    Route::post('/follow', [UserFollowingController::class, 'addFollow'])->name('follow');
     
- Route::post('/addComment', [CommentController::class, 'store'])->name('addComment');
+ 
 
     Route::get('/csrf-token', function() {
         return response()->json(['csrf_token' => csrf_token()]);

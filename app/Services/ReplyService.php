@@ -2,6 +2,7 @@
  
 namespace App\Services;
 
+use App\Models\Comment;
 use App\Models\Reply;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Support\Facades\Auth;
@@ -27,8 +28,12 @@ class ReplyService {
     
         $reply = new Reply();
         $reply->content = $content;
-        $reply->user_id = $userId;  
-        $data->replies()->save($reply); 
+        $reply->user_id = $userId;
+        $comment = Comment::find($data);
+        if($comment){
+            
+            $comment->replies()->save($reply);
+        }   
         return $reply;  
     }
 
