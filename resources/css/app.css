@@ -1,6 +1,8 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+
 .btn-drop{
  
   background: #dbdbdb!important;

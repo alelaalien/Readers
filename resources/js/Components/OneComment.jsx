@@ -77,7 +77,7 @@ export default function OneComment({comment, auth})
                         <div>
                             <div className="capitalize"> {comment.user.name } </div>
                             {/*----------------- boton de edicion---------------  */}
-                            {auth.user.id && (
+                            {auth.user != null && auth.user.id && (
                                 <>
                                 <Dropdown show={showDropdown} onClick={handleEditOptions}>
                                     <Dropdown.Toggle className="btn-drop" id="dropdown-basic">

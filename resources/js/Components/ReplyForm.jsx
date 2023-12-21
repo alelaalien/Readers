@@ -48,7 +48,7 @@ export default function ReplyForm({auth, commentId})
                 
             </div>
             
-             {auth.user.id ? (
+             {auth.user != null && auth.user.id ? (
                 <button onClick={sendReply} className="btn btnsend comment-btn">Send</button>
              ):(
                 <span> You must to be registered to comment </span>

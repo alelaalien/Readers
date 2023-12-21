@@ -1,10 +1,16 @@
 import React, { useState } from 'react'
 import styled from 'styled-components'
 import BurguerButton from '../BurguerButton'
+import { Dropdown } from 'react-bootstrap'; 
 
 function Navbar({auth}) {
 
-  const [clicked, setClicked] = useState(false)
+  const [clicked, setClicked] = useState(false);
+  const [showDropdown, setShowDropdown] = useState(false);
+
+  const handleOptions = () => {
+    setShowDropdown(!showDropdown);
+  };
   const handleClick = () => {
     
     setClicked(!clicked)
@@ -16,6 +22,13 @@ function Navbar({auth}) {
         <a  className='self-center float-left' onClick={handleClick} href="#h">
           <img src="../img/assets/home.png" alt="home" style={{width: '70px'}} />
         </a>
+        <div className='items-center mini-search w-full' > 
+            <form action="" className='float-left self-center mr-4 m-auto w-full' style={{display:'flex'}}>
+              <input  type="search"  placeholder="Search" className="form-control" aria-label="Search" style={{display: 'inline'}}/>
+              <button><img src="../img/assets/lupa.png" alt="search" /></button> 
+            </form>
+          </div> 
+
         <div className={`w-full flex links ${clicked ? 'active' : ''}`}>
           
           
@@ -24,9 +37,49 @@ function Navbar({auth}) {
           <a className='self-center float-left' href="">Echoes</a>
           <a className='self-center float-left' href="">Books</a>
           {auth.user ? (
-              <a href={route('dashboard')} style={{color: 'wheat'}} className="self-center float-right nav-link font-semibold text-gray-600 hover:text-gray-900 dark:text-gray-400 dark:hover:text-white focus:outline focus:outline-2 focus:rounded-sm focus:outline-red-500">
+            <>
+            <MiniBar>
+              <a href={route('dashboard')} className="min-bar self-center float-right nav-link font-semibold text-gray-600 hover:text-gray-900 dark:text-gray-400 dark:hover:text-white focus:outline focus:outline-2 focus:rounded-sm focus:outline-red-500">
                   My profile
               </a>
+              <a href={route('dashboard')} className="min-bar self-center float-right nav-link font-semibold text-gray-600 hover:text-gray-900 dark:text-gray-400 dark:hover:text-white focus:outline focus:outline-2 focus:rounded-sm focus:outline-red-500">
+                  Settings
+              </a>
+              <a href={route('logout')}   className="min-bar self-center float-right nav-link font-semibold text-gray-600 hover:text-gray-900 dark:text-gray-400 dark:hover:text-white focus:outline focus:outline-2 focus:rounded-sm focus:outline-red-500">
+                  Log out
+              </a>
+            </MiniBar>
+
+            <ToggleDiv>
+              <Dropdown show={showDropdown} onClick={handleOptions}>
+                  <Dropdown.Toggle className="drop-toggle" id="dropdown-basic">
+                        My Account
+                  </Dropdown.Toggle>
+                  <Menu>
+                  <Dropdown.Menu>
+                          <Dropdown.Item  >
+                            <div className='flex'>
+                              <h4 className="m-auto">My Profile</h4> 
+                              <img src="../img/assets/user.png" alt="user" />
+                            </div>
+                          </Dropdown.Item>   
+                          <Dropdown.Item  >
+                            <div className='flex'>
+                              <h4 className="m-auto">Settings</h4> 
+                              <img src="../img/assets/ajustes.png" alt="settings icon" /> 
+                            </div>
+                          </Dropdown.Item>  
+                          <Dropdown.Item  >
+                            <div className='flex'>
+                              <h4 className="m-auto">Log out</h4> 
+                              <img src="../img/assets/salir2.png" alt="close icon" /> 
+                            </div>
+                          </Dropdown.Item>  
+                  </Dropdown.Menu>
+                  </Menu>
+              </Dropdown>
+                </ToggleDiv>
+            </>
           ) : (
               <>
                   <a href={route('login')} style={{color: 'wheat'}}  className="self-center float-right font-semibold text-gray-600 hover:text-gray-900 dark:text-gray-400 dark:hover:text-white focus:outline focus:outline-2 focus:rounded-sm focus:outline-red-500">
@@ -39,9 +92,9 @@ function Navbar({auth}) {
               </>
           )}
 
-         <div className='items-center grid'> 
-            <form action="" className='float-left self-center mr-4 m-auto' style={{display:'flex'}}>
-              <input  type="search"  placeholder="Search" className="form-control" aria-label="Search" style={{width: 'fit-content', display: 'inline'}}/>
+         <div className='items-center max-search' > 
+            <form action="" className='float-left self-center mr-4 m-auto w-full' style={{display:'flex'}}>
+              <input  type="search"  placeholder="Search" className="form-control w-full" aria-label="Search" style={{display: 'inline'}}/>
               <button><img src="../img/assets/lupa.png" alt="search" /></button> 
             </form>
           </div> 
@@ -95,12 +148,12 @@ const NavContainer = styled.nav`
       font-size: 2rem;
       display: block;
       
-    }
-    @media(min-width: 768px){
+    } 
+    @media(min-width: 769px){
       position: initial;
       margin: 0;
       a, form{
-        font-size: 1.7rem;
+        font-size: 1.3rem;
         color: wheat;
         display: inline;
         
@@ -114,7 +167,7 @@ const NavContainer = styled.nav`
     position: absolute;
     margin-left: auto;
     margin-right: auto;
-    top: 32%;
+    top: 43%;
     left: 0;
     right: 0;
     text-align: center;
@@ -131,12 +184,41 @@ const NavContainer = styled.nav`
     }
   }
   .burguer{
-    @media(min-width: 768px){
+    @media(min-width: 769px){
       display: none;
     }
   }
   .burguer{
-    width:100%;
+    width:25%;
+  }
+  .min-bar, .mini-search, .max-search{
+    display:none;
+  }
+   
+  @media (min-width: 769px) {
+    .mini-search {
+      display: none;
+    }
+  }
+  
+  
+  @media (max-width: 768px) {
+    .mini-search, .min-bar {
+      display: grid;
+
+      
+    }
+  }
+  
+ 
+  @media (min-width: 769px) {
+    .max-search {
+      display: grid;
+      width:45%;
+    }
+    .min-bar{
+      display:none;
+    }
   }
 `
 
@@ -157,4 +239,44 @@ const BgDiv = styled.div`
     width: 100%;
     height: 100%;
   }
+`
+const ToggleDiv = styled.div`
+position: absolute;
+right:10px;
+
+.drop-toggle{
+  background: black;
+  color: wheat;
+  font-size: 1.3rem;
+  height: 60px;
+  margin-top: -10px;
+  border: 1px solid black;
+  border-radius: 0.65rem;
+  @media(max-width: 768px){
+    display:none;
+  }
+}
+`
+const MiniBar = styled.div`
+a.min-bar{
+  @media(min-width: 769px){
+    display:none;
+  }
+}
+`
+const Menu = styled.div`
+.dropdown-menu.show{
+  background: #333;
+}
+h4{
+  font-size: 1.2rem;
+}
+a.dropdown-item{
+display:flex;
+color:wheat;
+}
+a.dropdown-item:hover{
+  h4{color:black!important;}
+  }
+}
 `

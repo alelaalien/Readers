@@ -66,7 +66,7 @@ const sendComment = async (e) => {
               <div className="form-group" style={{ padding: '2%'}} >  
                 <textarea  className="form-control" rows="3" placeholder="Write your comment here" id="comment-content"></textarea>
                 {
-              auth.user.id ?
+              auth.user != null && auth.user.id ?
               ( <> <button 
                     className="btn btn-primary comment-btn float-right w-24" 
                     onClick={sendComment} style={{marginTop: '1%'}}>Send</button></> )
