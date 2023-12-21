@@ -17,7 +17,44 @@
 }
 .card-items div.dropdown{
   position: absolute;
-  right: 0;
+  position: absolute;
+  right: 11px; 
+  top: 15px;
+}
+.row-comm--r{
+  border-top-right-radius: 2rem;
+  border-bottom-left-radius: 2rem;
+  background: #f9f9f9;
+}
+
+.btn--discard{
+  background: #8a0000!important;
+  color: white!important;
+  border: 1px solid #535353!important;
+  font-size: 13px!important;
+}
+.btn--save{
+  background: #024600!important;
+  color: white!important;
+  border: 1px solid #002f03!important;
+  font-size: 13px!important;
+}
+.btn--cancel{
+  background: #2f2f2f!important;
+  color: white!important;
+  border: 1px solid #000!important;
+  font-size: 13px!important;
+}
+
+a.dropdown-item{
+  display: flex;
+  align-items: center;
+}
+
+a.dropdown-item img{
+  width: 25px;
+  position: absolute;
+  right: 5px;
 }
 /* .btnsend{
   color:white!important;

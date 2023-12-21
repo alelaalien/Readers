@@ -63,24 +63,30 @@ const sendComment = async (e) => {
               <div className="card-header">
                   Comments
               </div> 
-              <div className="form-group" >  
+              <div className="form-group" style={{ padding: '2%'}} >  
                 <textarea  className="form-control" rows="3" placeholder="Write your comment here" id="comment-content"></textarea>
-              </div> 
-            {
+                {
               auth.user.id ?
-              ( <> <button type="subtmit" className="btn btn-primary comment-btn" onClick={sendComment}>Send</button></> )
+              ( <> <button 
+                    className="btn btn-primary comment-btn float-right w-24" 
+                    onClick={sendComment} style={{marginTop: '1%'}}>Send</button></> )
               : ( <><span> You must to be registered to comment </span></> ) 
             } 
+              </div> 
+            
            
             <div className="card-body">  
               <ul className="list-group list-group-flush" wire:key="list-data->id" id="list-data-id"> 
-                <li className="list-group-item"> 
+                
                 {
                   comments.map(element => {
-                    return( <OneComment comment={element} auth={auth} key={`one-comment${element.id}`}></OneComment>);
-                  }) 
+                    return( 
+                    <li className="list-group-item" style={{border:'none'}}> 
+                    <OneComment comment={element} auth={auth} key={`one-comment${element.id}`}></OneComment>
+                    </li>); 
+                    }) 
                 }
-                </li>  
+               
               </ul> 
             </div>   
           </div> 
