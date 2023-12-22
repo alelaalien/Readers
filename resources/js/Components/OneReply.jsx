@@ -4,17 +4,12 @@ import dayjs from "dayjs";
 import relativeTime from 'dayjs/plugin/relativeTime';
 import { Dropdown } from 'react-bootstrap'; 
 import {Collapse} from 'react-collapse';
-import ReplyForm from "./ReplyForm";
-import ReplyList from "./ReplyList";
-
-
-
 
 dayjs.extend(relativeTime);
- 
-export default function OneComment({comment, auth})
+
+export default function OneReply({reply, auth})
 {
- 
+console.log(reply);
     const [showDropdown, setShowDropdown] = useState(false);
     const [isEditing, setIdEditing] = useState(false);
     const [isOpen, setIsOpen] = useState(false);
@@ -39,19 +34,19 @@ export default function OneComment({comment, auth})
     };
   
     const handleDelete = () => {
-    
+      // Lógica para eliminar
     };
   
     const handleReport = () => {
       
     };
    
-    const sendCommentEditted = () => {
+    const sendreplyEditted = () => {
 
         setIdEditing(false);
     }
 
-    const discardCommentEditting = () => {
+    const discardreplyEditting = () => {
 
         setIdEditing(false);
     }
@@ -63,7 +58,7 @@ export default function OneComment({comment, auth})
             {/* col-1 */}
             <div className="user-thumbnail thumbnail d-flex cursor-pointer"> 
                 <a href="/profiles" className="link-style-none  m-a">
-                    <img src={`../img/users/${comment.user.user_pic}`}
+                    <img src={`../img/users/${reply.user.user_pic}`}
                     className="user-image" alt="User thumbnail" style={{width:'50px'}}/>
                 </a>  
             </div> 
@@ -72,7 +67,7 @@ export default function OneComment({comment, auth})
             {/* col-2 */}
                     <div className="card-items"> 
                         <div>
-                            <div className="capitalize"> {comment.user.name } </div>
+                            <div className="capitalize"> {reply.user.name } </div>
                             {/*----------------- boton de edicion---------------  */}
                             {auth.user != null && auth.user.id && (
                                 <>
@@ -81,7 +76,7 @@ export default function OneComment({comment, auth})
                                         <img src="/img/assets/points.png" alt="Points" />
                                     </Dropdown.Toggle>
                                     <Dropdown.Menu>
-                                {auth.user.id === comment.user_id ? (
+                                {auth.user.id === reply.user_id ? (
                                         <>
                                             <Dropdown.Item onClick={handleEdit}>
                                                 <h4 className="m-auto text-base">Edit</h4> 
@@ -116,14 +111,14 @@ export default function OneComment({comment, auth})
                         {/* ------------------contenido------------------------ */}
                             {isEditing   ? (
                                 <>
-                                    <textarea defaultValue={comment.content } className="form-control"/>
+                                    <textarea defaultValue={reply.content } className="form-control"/>
                                     <div className="text-right">
-                                        <button className="btn m-1 btn--save" onClick={sendCommentEditted}> Save changes </button>
-                                        <button className="btn m-1 btn--discard" onClick={discardCommentEditting}> Discard</button> 
+                                        <button className="btn m-1 btn--save" onClick={sendreplyEditted}> Save changes </button>
+                                        <button className="btn m-1 btn--discard" onClick={discardreplyEditting}> Discard</button> 
                                     </div>
                                 </>
                             ) : 
-                                (<p className="mb-1 capitalize">  {comment.content }  </p>)
+                                (<p className="mb-1 capitalize">  {reply.content }  </p>)
                             }
                         
                         </div>
@@ -133,33 +128,27 @@ export default function OneComment({comment, auth})
                 </div>
                 <div className="flex">
                 <div className="w-full m-1" style={{marginLeft: '4%'}}>
-                    <span className="text-muted text-xs">{dayjs(comment.created_at).fromNow()}</span>  
+                    <span className="text-muted text-xs">{dayjs(reply.created_at).fromNow()}</span>  
                 </div> 
                 <div>
                             
                             <div className="d-flex">
-                                <span className="reply-comment-button cursor-pointer collapser collapser " data-id=" " data-toggle="collapse" data-target="#comment-tails-{{$comment.id}}" aria-expanded="false" aria-controls="comment-tails-comment-id"></span>
-                                    {/* @if($comment.replies_count) */}
+                                <span className="reply-reply-button cursor-pointer collapser collapser " data-id=" " data-toggle="collapse" data-target="#reply-tails-{{$reply.id}}" aria-expanded="false" aria-controls="reply-tails-reply-id"></span>
+                                    {/* @if($reply.replies_count) */}
                                 <span className="text-muted text-xs" > </span>
-                            {/* ({{$comment.replies_count}}) */} 
+                            {/* ({{$reply.replies_count}}) */} 
                                 <div>
                                     <span onClick={handleCollapse}  
-                                    className="text-muted cursor-pointer collapsercomment-id" style={{fontSize: '12px'}}  data-id="comment-id" data-toggle="collapse" data-target={`#comment-tails-${comment.id}`} aria-expanded="false" aria-controls="comment-tails-comment-id">reply</span>
+                                    className="text-muted cursor-pointer collapserreply-id" style={{fontSize: '12px'}}  data-id="reply-id" data-toggle="collapse" data-target={`#reply-tails-${reply.id}`} aria-expanded="false" aria-controls="reply-tails-reply-id">reply</span>
 
                                 </div> 
                             </div> 
                             {/* @else
-                                @if($comment.replies_count) */} 
+                                @if($reply.replies_count) */} 
                         </div>
                     </div> 
             </div>
         </div>
-        <>
-        <Collapse isOpened={isOpen} style= {{marginTop:'10px'}} id={`comment-tails-${comment.id}`} >
-            
-            <ReplyList replies={comment.replies} commentId={comment.id} auth={auth}  key={`reply-list${comment.id}`}></ReplyList> 
-        </Collapse>
-        </>
     </>
     )
 }

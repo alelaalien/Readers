@@ -9,10 +9,10 @@ class ReplyController extends Controller
 {
     public function store(Request $request)
     {
-        $comment_id = $request->comment_id;
-        $content = $request->content;
-
+        $comment_id = $request->commentId;
+        $content = $request->content; 
         $response = app(ReplyService::class)->saveReply($comment_id, $content);
-        return response()->json('ok');
+       
+        return  $response ;
     }
 }

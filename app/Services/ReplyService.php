@@ -33,19 +33,20 @@ class ReplyService {
         if($comment){
             
             $comment->replies()->save($reply);
-        }   
-        return $reply;  
+        }    
+        return  $this->getRepliesByCommentId($data);;
     }
 
     public function getRepliesByCommentId($id)
     {
-        return DB::table('replies as r')
-        ->select('r.id', 'r.content', 'r.comment_id', 'u.name', 'u.profile_photo_path AS user_pic', 
-        'r.user_id', DB::raw("DATE_FORMAT(r.created_at, '%d-%m-%Y %H:%s') AS f_created_at"))
-        ->leftJoin('users as u', 'u.id', '=', 'r.user_id')
-        ->where('r.comment_id', $id)
-        ->orderByDesc('r.created_at')
-        ->get();  
+        return Reply::select('id', 'user_id', 'content', 'comment_id', 'created_at')
+        ->with([
+            'user:id,name,email_verified_at,profile_photo_path as user_pic',
+        ])
+        ->where('comment_id', $id)
+        ->orderByDesc('created_at')
+        ->get();
+ 
     }
 
     public function updateReply($reply, $content)
