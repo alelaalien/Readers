@@ -1,11 +1,14 @@
 import { useState } from "react";
 import OneComment from "./OneComment";
 
-export default function CommentList({item, auth})
+export default function CommentList({item, auth, comments})
 {
  
-let comments = item.comments;
 const element = item;
+const [commentList, setCommentList] = useState(comments); 
+
+
+// fetch('http://127.0.0.1:8000/poem/').then().then();
 
 const sendComment = async (e) => {
 
@@ -38,8 +41,10 @@ const sendComment = async (e) => {
            return response.json();
              
           }).then(response =>{
-
-            if(response == 'ok'){ document.getElementById('comment-content').value = ''; }
+            
+            if(response ){ document.getElementById('comment-content').value = ''; 
+            setCommentList(response.comments); 
+          }
           })
           .catch(error => {
               
@@ -79,7 +84,7 @@ const sendComment = async (e) => {
               <ul className="list-group list-group-flush" wire:key="list-data->id" id="list-data-id"> 
                 
                 {
-                  comments.map(element => {
+                  commentList.map(element => {
                     return( 
                     <li className="list-group-item" style={{border:'none'}}> 
                     <OneComment comment={element} auth={auth} key={`one-comment${element.id}`}></OneComment>

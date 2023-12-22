@@ -2,12 +2,13 @@
  
 namespace App\Services;
 
-use App\Models\Comment;
 use App\Models\Poem;
-use Illuminate\Database\Eloquent\ModelNotFoundException;
+use App\Models\Comment;
+use App\Services\MainService;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\ValidationException;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
 
 class CommentService {
 
@@ -25,8 +26,6 @@ class CommentService {
             throw ValidationException::withMessages($validator->errors()->messages());
             
         }
-        
-
         switch ($classType) {
             case 'App\Models\Poem':
                 $item = Poem::findOrFail($data);
@@ -44,9 +43,10 @@ class CommentService {
         $comment->user_id = $userId;
     
         try {
-             $item->comments()->save($comment);
+             $item->comments()->save($comment); 
+             $response = app(MainService::class)->getDataByItem($data, $classType);
 
-             return 'ok';
+             return $response;
         } catch (\Throwable $th) {
             return ['error' => $th];
         }

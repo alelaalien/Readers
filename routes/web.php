@@ -47,7 +47,7 @@ Route::middleware('auth')->group(function () {
         return response()->json(['csrf_token' => csrf_token()]);
     });
     
-Route::get('poems',  [PoemController::class, 'index'] )->name('poems');
+Route::get('poems/{id}',  [PoemController::class, 'index'] )->name('poems');
 
 
 require __DIR__.'/auth.php';

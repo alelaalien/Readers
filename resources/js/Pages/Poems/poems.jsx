@@ -4,7 +4,7 @@ import ReactionBar from '@/Components/ReactionBar';
 import CommentList from '@/Components/CommentsList';
  
 
-export default function poems({ auth, poem }) {
+export default function poems({ auth, poem , comments}) {
  
     const divStyle = {
        height: '500px' 
@@ -29,7 +29,7 @@ export default function poems({ auth, poem }) {
                     </div>
                 </div>
  
-                <CommentList item={poem} key={'list' + poem.id} auth={auth}></CommentList>
+                <CommentList item={poem} comments={comments} key={'list' + poem.id} auth={auth}></CommentList>
              </div>
          </Guest>
     );

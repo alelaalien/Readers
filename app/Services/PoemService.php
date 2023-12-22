@@ -8,8 +8,8 @@ use Illuminate\Support\Facades\DB;
 class PoemService {
 
   
-    public function showPoems($id)
-    { 
+    public function showPoems($id )
+    {    
             return Poem::where('poems.id', $id)
             ->select(
             'poems.title',

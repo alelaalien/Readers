@@ -10,13 +10,14 @@ use Inertia\Inertia;
 class PoemController extends Controller
 {
      
-    public function index()
+    public function index($id)
     {   
-        $id = 1;
+        
         $poem = app(PoemService::class)->showPoems($id); 
         $poem->class= get_class($poem);
+        $comments = $poem->comments;
 
-        return Inertia::render('Poems/poems', ['poem' => $poem]);
+        return Inertia::render('Poems/poems', ['poem' => $poem, 'comments' => $comments]);
     }
 
     

@@ -8,10 +8,8 @@ export default function Guest({ children, auth }) {
     return (
         <div className="min-h-screen flex flex-col sm:justify-center items-center  sm:pt-0 bg-gray-100">
              
-                 <Vision/>
-
-                 <NavBar auth={auth}/>                          
-
+                 <Vision/> 
+                 <NavBar auth={auth}/>        
             <div className="w-full shadow-md pt-0" style={{background: 'linear-gradient(to bottom, black 30%, white 30%)'}}>
                 {children}
             </div>
