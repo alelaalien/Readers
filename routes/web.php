@@ -10,14 +10,12 @@ use App\Http\Controllers\ReplyController;
 use App\Http\Controllers\CommentController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\UserFollowingController;
- 
+use App\Models\Comment;
 
 Route::get('/', function () {
     return Inertia::render('Welcome', [
         'canLogin' => Route::has('login'),
-        'canRegister' => Route::has('register'),
-        'laravelVersion' => Application::VERSION,
-        'phpVersion' => PHP_VERSION,
+        'canRegister' => Route::has('register'), 
     ]);
 });
 
@@ -33,6 +31,7 @@ Route::middleware('auth')->group(function () {
   Route::resource('poems', PoemController::class)->only('store', 'update', 'destroy');
   Route::post('/addComment', [CommentController::class, 'store'])->name('addComment');
   Route::post('/addReply', [ReplyController::class, 'store'])->name('addReply');
+  Route::delete('/deleteComment/{id}', [CommentController::class, 'destroy'])->name('deleteComment');
   
 
 });
@@ -47,7 +46,7 @@ Route::middleware('auth')->group(function () {
         return response()->json(['csrf_token' => csrf_token()]);
     });
     
-Route::get('poems/{id}',  [PoemController::class, 'index'] )->name('poems');
+Route::get('/poems/{id}',  [PoemController::class, 'index'] )->name('poems');
 
 
 require __DIR__.'/auth.php';

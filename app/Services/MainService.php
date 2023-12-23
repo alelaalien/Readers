@@ -12,9 +12,7 @@ class MainService{
         switch ($classType) {
             case 'App\Models\Poem': 
                 $response = app(PoemService::class)->showPoems($itemId);
-                return $response;
-
-            //    return $data;
+                return $response; 
            
                 break;
             

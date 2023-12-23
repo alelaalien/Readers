@@ -1,15 +1,13 @@
 import { useState } from "react";
-import OneComment from "./OneComment";
+import OneComment from "./OneComment"; 
 
 export default function CommentList({item, auth, comments})
 {
  
 const element = item;
 const [commentList, setCommentList] = useState(comments); 
-
-
-// fetch('http://127.0.0.1:8000/poem/').then().then();
-
+ 
+let rand = Math.random();
 const sendComment = async (e) => {
 
   e.preventDefault(); 
@@ -75,19 +73,21 @@ const sendComment = async (e) => {
               ( <> <button 
                     className="btn btn-primary comment-btn float-right w-24" 
                     onClick={sendComment} style={{marginTop: '1%'}}>Send</button></> )
-              : ( <><span> You must to be registered to comment </span></> ) 
+              : ( <><span style={{color:'#8c8a8a'}}> You must to be registered to comment </span></> ) 
             } 
               </div> 
             
            
             <div className="card-body">  
-              <ul className="list-group list-group-flush" wire:key="list-data->id" id="list-data-id"> 
+              <ul className="list-group list-group-flush" key={`list-data-${item.id}-${rand}`} id="list-data-id"> 
                 
                 {
-                  commentList.map(element => {
+                  commentList.map((element, index) => {
                     return( 
-                    <li className="list-group-item" style={{border:'none'}}> 
-                    <OneComment comment={element} auth={auth} key={`one-comment${element.id}`}></OneComment>
+                    
+                    <li className="list-group-item" style={{border:'none'}} key={`list-${index}`}> 
+   
+                    <OneComment comment={element} auth={auth} key={`one-comment${element.id}-${index}`}></OneComment>
                     </li>); 
                     }) 
                 }

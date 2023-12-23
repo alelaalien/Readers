@@ -9,7 +9,7 @@ dayjs.extend(relativeTime);
 
 export default function OneReply({reply, auth})
 {
-console.log(reply);
+    
     const [showDropdown, setShowDropdown] = useState(false);
     const [isEditing, setIdEditing] = useState(false);
     const [isOpen, setIsOpen] = useState(false);

@@ -2,7 +2,15 @@
 @tailwind components;
 @tailwind utilities;
 
+.replies-count:hover{
+color: rgb(5, 5, 189);
+text-decoration: underline;
+}
 
+.replies-count{
+  color:rgba(33, 37, 41, 0.74);
+  text-decoration: none;
+}
 .btn-drop{
  
   background: #dbdbdb!important;

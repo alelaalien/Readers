@@ -44,8 +44,7 @@ class CommentService {
     
         try {
              $item->comments()->save($comment); 
-             $response = app(MainService::class)->getDataByItem($data, $classType);
-
+             $response = app(MainService::class)->getDataByItem($data, $classType); 
              return $response;
         } catch (\Throwable $th) {
             return ['error' => $th];
@@ -75,20 +74,19 @@ class CommentService {
     public function deleteComment($data)
     { 
        
-        $retrono =  ["id" => $data->commentable_id,
-                    'class' => $data-> commentable_type];
-  
+       
         try {
      
-            $comment = comment::findOrFail($data->id);
+            $comment = comment::findOrFail($data); 
             
             $comment->delete();
-
-            return ['data' =>  $retrono];
+ 
+            return 'ok';
           
         } catch (ModelNotFoundException $exception) { 
 
-            throw new \Exception('Comment not found.');
+            return 'Comment not found.';
+ 
         }
     }
  

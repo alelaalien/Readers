@@ -2,11 +2,21 @@ import React, { useState } from 'react'
 import styled from 'styled-components'
 import BurguerButton from '../BurguerButton'
 import { Dropdown } from 'react-bootstrap'; 
+import Login from '../Login';
+import { useForm } from '@inertiajs/react';
 
 function Navbar({auth}) {
 
   const [clicked, setClicked] = useState(false);
   const [showDropdown, setShowDropdown] = useState(false);
+  const [loginBox, setLoginBox] = useState(false);
+  const { post } = useForm({
+    
+});
+  const handleLoginBox = () =>{
+
+    setLoginBox(!loginBox);
+  }
 
   const handleOptions = () => {
     setShowDropdown(!showDropdown);
@@ -16,10 +26,16 @@ function Navbar({auth}) {
     setClicked(!clicked)
   }
   
+  const submit = (e) => {
+    e.preventDefault();
+
+    post(route('logout'));
+};
+  
   return (
     <>
       <NavContainer>
-        <a  className='self-center float-left' onClick={handleClick} href="#h">
+        <a  className='self-center float-left' onClick={handleClick}>
           <img src="../img/assets/home.png" alt="home" style={{width: '70px'}} />
         </a>
         <div className='items-center mini-search w-full' > 
@@ -29,9 +45,7 @@ function Navbar({auth}) {
             </form>
           </div> 
 
-        <div className={`w-full flex links ${clicked ? 'active' : ''}`}>
-          
-          
+        <div className={`w-full flex links ${clicked ? 'active' : ''}`}> 
          
           <a className='self-center float-left' href="">Poems</a>
           <a className='self-center float-left' href="">Echoes</a>
@@ -45,7 +59,7 @@ function Navbar({auth}) {
               <a href={route('dashboard')} className="min-bar self-center float-right nav-link font-semibold text-gray-600 hover:text-gray-900 dark:text-gray-400 dark:hover:text-white focus:outline focus:outline-2 focus:rounded-sm focus:outline-red-500">
                   Settings
               </a>
-              <a href={route('logout')}   className="min-bar self-center float-right nav-link font-semibold text-gray-600 hover:text-gray-900 dark:text-gray-400 dark:hover:text-white focus:outline focus:outline-2 focus:rounded-sm focus:outline-red-500">
+              <a onClick={submit}  className="cursor-pointer min-bar self-center float-right nav-link font-semibold text-gray-600 hover:text-gray-900 dark:text-gray-400 dark:hover:text-white focus:outline focus:outline-2 focus:rounded-sm focus:outline-red-500">
                   Log out
               </a>
             </MiniBar>
@@ -69,11 +83,14 @@ function Navbar({auth}) {
                               <img src="../img/assets/ajustes.png" alt="settings icon" /> 
                             </div>
                           </Dropdown.Item>  
-                          <Dropdown.Item  >
-                            <div className='flex'>
-                              <h4 className="m-auto">Log out</h4> 
-                              <img src="../img/assets/salir2.png" alt="close icon" /> 
-                            </div>
+                          <Dropdown.Item  onClick={submit} >
+                          <form onSubmit={submit}>
+                            
+                              <div className='flex' >
+                                <h4 className="m-auto">Log out</h4> 
+                                <img src="../img/assets/salir2.png" alt="close icon" /> 
+                              </div>
+                            </form>
                           </Dropdown.Item>  
                   </Dropdown.Menu>
                   </Menu>
@@ -82,10 +99,19 @@ function Navbar({auth}) {
             </>
           ) : (
               <>
-                  <a href={route('login')} style={{color: 'wheat'}}  className="self-center float-right font-semibold text-gray-600 hover:text-gray-900 dark:text-gray-400 dark:hover:text-white focus:outline focus:outline-2 focus:rounded-sm focus:outline-red-500">
+                 
+                  <a style={{color: 'wheat'}}  
+                    onClick={handleLoginBox}
+                    className="cursor-pointer self-center float-right font-semibold text-gray-600 hover:text-gray-900 dark:text-gray-400 dark:hover:text-white focus:outline focus:outline-2 focus:rounded-sm focus:outline-red-500">
                       Log in
                   </a>
+                  {loginBox && (
+                      <LoginBox>
+                        <Login></Login>
+                      </LoginBox> 
 
+                  )  }
+                    
                   <a  href={route('register')} style={{color: 'wheat'}} className="self-center float-right ms-4 font-semibold text-gray-600 hover:text-gray-900 dark:text-gray-400 dark:hover:text-white focus:outline focus:outline-2 focus:rounded-sm focus:outline-red-500">
                       Register
                   </a>
@@ -125,7 +151,7 @@ const NavContainer = styled.nav`
   align-items: center;
   width:100%;
   
-  a{
+  a, .div-link{
     color: wheat;
     text-decoration: none;
     margin-right: 1rem;
@@ -279,4 +305,14 @@ a.dropdown-item:hover{
   h4{color:black!important;}
   }
 }
+`
+const LoginBox = styled.div` 
+position: absolute; 
+  width: 400px;
+  padding: 2%;
+  border-radius: 0.65rem;
+  background: #ececec;
+  border: 1px solid #8a8686;
+  right: 6px;
+  top: 45%;
 `

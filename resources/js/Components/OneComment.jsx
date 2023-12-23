@@ -3,12 +3,11 @@ import { useState } from "react";
 import dayjs from "dayjs";
 import relativeTime from 'dayjs/plugin/relativeTime';
 import { Dropdown } from 'react-bootstrap'; 
-import {Collapse} from 'react-collapse';
-import ReplyForm from "./ReplyForm";
+import {Collapse} from 'react-collapse'; 
 import ReplyList from "./ReplyList";
+import Swal from "sweetalert2";
 
-
-
+import withReactContent from 'sweetalert2-react-content'
 
 dayjs.extend(relativeTime);
  
@@ -18,7 +17,10 @@ export default function OneComment({comment, auth})
     const [showDropdown, setShowDropdown] = useState(false);
     const [isEditing, setIdEditing] = useState(false);
     const [isOpen, setIsOpen] = useState(false);
-
+    const [deleted, setDeleted] = useState(false);
+    const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
+    const [modalOpen, setModalOpen] = useState(false);
+    
     const handleCollapse=() =>{
        setIsOpen(!isOpen);
     } 
@@ -37,10 +39,31 @@ export default function OneComment({comment, auth})
         
         setIdEditing(false);
     };
-  
-    const handleDelete = () => {
-    
-    };
+      
+    const handleDelete = async () => {
+ 
+       try {
+    const response = await fetch(`http://127.0.0.1:8000/deleteComment/${comment.id}`, {
+      method: 'DELETE',
+      headers: {
+        'Content-Type': 'application/json','X-CSRF-TOKEN':csrfToken
+       
+      }
+    });
+
+            if (response.ok) { 
+            
+            if (response.status == 200){
+                setDeleted(true);
+            }
+            } else {
+                console.error('Error');
+            }
+        } catch (error) {
+        
+        }
+     
+    }
   
     const handleReport = () => {
       
@@ -55,7 +78,43 @@ export default function OneComment({comment, auth})
 
         setIdEditing(false);
     }
- 
+
+    
+
+    const openModal = () => {
+    
+      setModalOpen(true);    console.log(modalOpen);
+    };
+  
+    const closeModal = () => {
+      setModalOpen(false);
+    };
+    
+const showSwal = () => {
+    withReactContent(Swal).fire({
+        title: "Are you sure?",
+        text: "You won't be able to revert this",
+        showCancelButton: true,
+        confirmButtonColor: "#3085d6",
+        cancelButtonColor: "#d33",
+        confirmButtonText: "Yes, delete it!"
+      }).then((result) => {
+        if (result.isConfirmed) {
+
+            handleDelete();
+            Swal.fire({
+                position: "center",
+                icon: "success",
+                title: "Done",
+                showConfirmButton: false,
+                timer: 1500
+              });
+        }
+    })
+  }
+
+
+    if(deleted) { return null;}
     
     return (
     <>
@@ -89,7 +148,7 @@ export default function OneComment({comment, auth})
                                              
                                                 
                                             </Dropdown.Item>   <hr  className="m-0"/>
-                                            <Dropdown.Item onClick={handleDelete}>
+                                            <Dropdown.Item onClick={showSwal}>
                                             <h4 className="m-auto text-base">Delete</h4> 
                                             <img src="../img/assets/eliminar.png" alt="Edit" /> 
                                                
@@ -133,34 +192,50 @@ export default function OneComment({comment, auth})
                 </div>
                 <div className="flex">
                 <div className="w-full m-1" style={{marginLeft: '4%'}}>
-                    <span className="text-muted text-xs">{dayjs(comment.created_at).fromNow()}</span>  
-                </div> 
+                    <span className="text-muted text-xs">
+                        {dayjs(comment.created_at).fromNow()}
+                        &nbsp;
+                        {comment.replies.length !== 0 ? ( ' -  ' ):''}</span>  
+                            
+                    <span className="replies-count cursor-pointer text-xs cursor-pointer collapsercomment-id"
+                    onClick={handleCollapse}  
+                    style={{fontSize: '12px'}}  
+                    data-toggle="collapse" 
+                    data-target={`#comment-tails-${comment.id}`} 
+                    aria-expanded="false" 
+                    aria-controls="comment-tails-comment-id"> 
+                        {
+                            comment.replies.length === 1 ? '1 reply' : comment.replies.length !== 0 ? comment.replies.length + ' replies' : ''
+                        }
+                    </span>
+                </div>
                 <div>
                             
                             <div className="d-flex">
-                                <span className="reply-comment-button cursor-pointer collapser collapser " data-id=" " data-toggle="collapse" data-target="#comment-tails-{{$comment.id}}" aria-expanded="false" aria-controls="comment-tails-comment-id"></span>
-                                    {/* @if($comment.replies_count) */}
-                                <span className="text-muted text-xs" > </span>
-                            {/* ({{$comment.replies_count}}) */} 
+                                <span className="reply-comment-button cursor-pointer collapser collapser " data-toggle="collapse" data-target="#comment-tails-{{$comment.id}}" aria-expanded="false" aria-controls="comment-tails-comment-id"></span>
+                                
                                 <div>
                                     <span onClick={handleCollapse}  
-                                    className="text-muted cursor-pointer collapsercomment-id" style={{fontSize: '12px'}}  data-id="comment-id" data-toggle="collapse" data-target={`#comment-tails-${comment.id}`} aria-expanded="false" aria-controls="comment-tails-comment-id">reply</span>
+                                    className="replies-count cursor-pointer collapsercomment-id" 
+                                    style={{fontSize: '12px'}}  
+                                    data-id="comment-id" 
+                                    data-toggle="collapse" 
+                                    data-target={`#comment-tails-${comment.id}`} 
+                                    aria-expanded="false" 
+                                    aria-controls="comment-tails-comment-id">reply</span>
 
                                 </div> 
                             </div> 
-                            {/* @else
-                                @if($comment.replies_count) */} 
                         </div>
                     </div> 
             </div>
         </div>
         <>
         <Collapse isOpened={isOpen} style= {{marginTop:'10px'}} id={`comment-tails-${comment.id}`} >
-            
             <ReplyList replies={comment.replies} commentId={comment.id} auth={auth}  key={`reply-list${comment.id}`}></ReplyList> 
         </Collapse>
         </>
+
     </>
     )
 }
-
