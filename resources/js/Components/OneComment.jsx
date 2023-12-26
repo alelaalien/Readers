@@ -6,7 +6,6 @@ import { Dropdown } from 'react-bootstrap';
 import {Collapse} from 'react-collapse'; 
 import ReplyList from "./ReplyList";
 import Swal from "sweetalert2";
-
 import withReactContent from 'sweetalert2-react-content'
 
 dayjs.extend(relativeTime);
@@ -18,8 +17,7 @@ export default function OneComment({comment, auth})
     const [isEditing, setIdEditing] = useState(false);
     const [isOpen, setIsOpen] = useState(false);
     const [deleted, setDeleted] = useState(false);
-    const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
-    const [modalOpen, setModalOpen] = useState(false);
+    const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content'); 
     
     const handleCollapse=() =>{
        setIsOpen(!isOpen);
@@ -33,6 +31,7 @@ export default function OneComment({comment, auth})
     const handleEdit = () => {
         
         setIdEditing(!isEditing);
+        
     };
 
     const handleEditFalse = () => {
@@ -69,26 +68,44 @@ export default function OneComment({comment, auth})
       
     };
    
-    const sendCommentEditted = () => {
+    const sendCommentEditted = async () => {
 
-        setIdEditing(false);
+        setIdEditing(false); 
+
+        let newContent = document.getElementById(`content${comment.id}`).value; 
+        let option = { 
+
+            method : 'PUT',
+            headers:{
+                'Content-Type': 'application/json',
+                'X-CSRF-TOKEN' : csrfToken
+            },
+            body : JSON.stringify({'content': newContent})
+        
+        }
+        
+        try {
+
+            const response = await fetch(`http://127.0.0.1:8000/updateComment/${comment.id}`, option);
+
+            const result = await response.json();
+
+        console.log(result);
+
+        } catch (error) {
+            
+            console.error(error);
+        }
+  
+
     }
 
     const discardCommentEditting = () => {
 
         setIdEditing(false);
-    }
+    } 
 
-    
-
-    const openModal = () => {
-    
-      setModalOpen(true);    console.log(modalOpen);
-    };
-  
-    const closeModal = () => {
-      setModalOpen(false);
-    };
+ 
     
 const showSwal = () => {
     withReactContent(Swal).fire({
@@ -175,7 +192,7 @@ const showSwal = () => {
                         {/* ------------------contenido------------------------ */}
                             {isEditing   ? (
                                 <>
-                                    <textarea defaultValue={comment.content } className="form-control"/>
+                                    <textarea defaultValue={comment.content } className="form-control" id={`content${comment.id}`}/>
                                     <div className="text-right">
                                         <button className="btn m-1 btn--save" onClick={sendCommentEditted}> Save changes </button>
                                         <button className="btn m-1 btn--discard" onClick={discardCommentEditting}> Discard</button> 

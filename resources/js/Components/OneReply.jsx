@@ -1,9 +1,9 @@
 import { useState } from "react";
- 
 import dayjs from "dayjs";
 import relativeTime from 'dayjs/plugin/relativeTime';
 import { Dropdown } from 'react-bootstrap'; 
-import {Collapse} from 'react-collapse';
+import Swal from "sweetalert2";
+import withReactContent from 'sweetalert2-react-content'
 
 dayjs.extend(relativeTime);
 
@@ -13,45 +13,143 @@ export default function OneReply({reply, auth})
     const [showDropdown, setShowDropdown] = useState(false);
     const [isEditing, setIdEditing] = useState(false);
     const [isOpen, setIsOpen] = useState(false);
+    const token = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
+    const [deleted, setDeleted] = useState(false);
 
     const handleCollapse=() =>{
        setIsOpen(!isOpen);
-    } 
-    
- 
+    }  
     const handleEditOptions = () => {
       setShowDropdown(!showDropdown);
-    };
+    }; 
   
-    const handleEdit = () => {
+    const handleReport = () => {
+      
+    }; 
+
+    const errorSwall = () => {
+
+        Swal.fire({
+            position: "center",
+            icon: "error",
+            title: "There was an error. Try again later",
+            showConfirmButton: false,
+            timer: 1500
+          });
+    }
+
+    const confirmationSwall = () =>{
+
+        Swal.fire({
+            position: "center",
+            icon: "success",
+            title: "Done",
+            showConfirmButton: false,
+            timer: 1500
+          });
+    }
+    //-----------------------edit ---------------------------------------
+    const discardreplyEditting = () => {
+
+        setIdEditing(false);
+    }
+    const sendReplyEdited = async () => {
         
-        setIdEditing(!isEditing);
-    };
+        setIdEditing(false);
+
+        let newContent = document.getElementById(`newContent${reply.id}`).value;
+ 
+
+        let option = { 
+
+            method : 'PUT',
+            headers:{
+                'Content-Type': 'application/json',
+                'X-CSRF-TOKEN' : token
+            },
+            body : JSON.stringify({'content': newContent})
+        
+        }
+        
+        try {
+
+            const response = await fetch(`http://127.0.0.1:8000/updateReply/${reply.id}`, option);
+
+            const result = await response.json();
+
+        console.log(result);
+
+        } catch (error) {
+            
+            console.error(error);
+        }
+  
+
+    }
 
     const handleEditFalse = () => {
         
         setIdEditing(false);
     };
-  
-    const handleDelete = () => {
-      // Lógica para eliminar
+      const handleEdit = () => {
+        
+        setIdEditing(!isEditing);
     };
-  
-    const handleReport = () => {
+    //--------------------delete-----------------------------------
+
+    const handleDelete = async () => {
       
+        try {
+
+            let options = {
+                method: 'DELETE',
+                headers: {'Content-Type': 'application/json',
+                          'X-CSRF-TOKEN' : token}
+            };
+
+            const data = await fetch(`http://127.0.0.1:8000/deleteReply/${reply.id}`, options);
+            
+            return data;
+
+        } catch (error) {
+            
+            console.error(error);
+
+            return false;
+        }
     };
-   
-    const sendreplyEditted = () => {
 
-        setIdEditing(false);
-    }
 
-    const discardreplyEditting = () => {
-
-        setIdEditing(false);
-    }
- 
     
+    const showSwal = () => {
+        withReactContent(Swal).fire({
+            title: "Are you sure?",
+            text: "You won't be able to revert this",
+            showCancelButton: true,
+            confirmButtonColor: "#3085d6",
+            cancelButtonColor: "#d33",
+            confirmButtonText: "Yes, delete it!"
+          }).then((result) => {
+            if (result.isConfirmed) {
+    
+                let result = handleDelete();
+
+                if(result){ 
+
+                  setDeleted(true);
+                  
+                  confirmationSwall();
+
+                }else{
+
+                errorSwall();
+
+            }
+        } 
+      });
+    }
+    
+    if(deleted){ return null; }
     return (
     <>
         <div className="flex">
@@ -84,7 +182,7 @@ export default function OneReply({reply, auth})
                                              
                                                 
                                             </Dropdown.Item>   <hr  className="m-0"/>
-                                            <Dropdown.Item onClick={handleDelete}>
+                                            <Dropdown.Item onClick={showSwal}>
                                             <h4 className="m-auto text-base">Delete</h4> 
                                             <img src="../img/assets/eliminar.png" alt="Edit" /> 
                                                
@@ -111,9 +209,9 @@ export default function OneReply({reply, auth})
                         {/* ------------------contenido------------------------ */}
                             {isEditing   ? (
                                 <>
-                                    <textarea defaultValue={reply.content } className="form-control"/>
+                                    <textarea id={`newContent${reply.id}`} defaultValue={reply.content } className="form-control"/>
                                     <div className="text-right">
-                                        <button className="btn m-1 btn--save" onClick={sendreplyEditted}> Save changes </button>
+                                        <button className="btn m-1 btn--save" onClick={sendReplyEdited}> Save changes </button>
                                         <button className="btn m-1 btn--discard" onClick={discardreplyEditting}> Discard</button> 
                                     </div>
                                 </>

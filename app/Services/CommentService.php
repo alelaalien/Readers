@@ -54,7 +54,7 @@ class CommentService {
     
     }
 
-    public function updateComment($comment, $content)
+    public function updateComment($commentId, $content)
     {
         $userId = Auth::id();
     
@@ -66,6 +66,7 @@ class CommentService {
         if ($validator->fails()) {
             throw ValidationException::withMessages($validator->errors()->messages());
         }
+        $comment = Comment::findOrFail($commentId);
         $comment->content = $content;
         $comment->save();
         return true; 

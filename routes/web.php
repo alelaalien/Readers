@@ -27,11 +27,17 @@ Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
-
+//poems
   Route::resource('poems', PoemController::class)->only('store', 'update', 'destroy');
+
+//comments 
   Route::post('/addComment', [CommentController::class, 'store'])->name('addComment');
-  Route::post('/addReply', [ReplyController::class, 'store'])->name('addReply');
   Route::delete('/deleteComment/{id}', [CommentController::class, 'destroy'])->name('deleteComment');
+  Route::put('/updateComment/{id}', [CommentController::class, 'update'])->name('updateComment');
+//replies
+  Route::post('/addReply', [ReplyController::class, 'store'])->name('addReply'); 
+  Route::delete('/deleteReply/{id}', [ReplyController::class, 'destroy'])->name('deleteReply');
+  Route::put('/updateReply/{id}', [ReplyController::class, 'update'])->name('updateReply');
   
 
 });

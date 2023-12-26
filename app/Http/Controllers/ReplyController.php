@@ -15,4 +15,19 @@ class ReplyController extends Controller
        
         return  $response ;
     }
+
+    public function destroy(String $id)
+    {
+        $result = app(ReplyService::class)->deleteReplyById($id);
+        return response()->json($result);
+    }
+
+    public function update(Request $request, string $id)
+    {   
+
+        $response = app(ReplyService::class)->updateReply($id, $request->content);
+
+        return response()->json( $response);
+    }
+ 
 }

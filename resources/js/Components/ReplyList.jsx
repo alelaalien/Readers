@@ -71,7 +71,7 @@ console.log(commentId);
           } 
             </div>  
           <div className="card-body">  
-            <ul className="list-group list-group-flush" id="list-data-id"> 
+            <ul className="list-group list-group-flush w-full" id="list-data-id"> 
               
               {
                 replyList.map((element, index )=> {

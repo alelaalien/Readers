@@ -5,8 +5,7 @@ namespace App\Services;
 use App\Models\Comment;
 use App\Models\Reply;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Auth; 
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\ValidationException;
 
@@ -49,7 +48,7 @@ class ReplyService {
  
     }
 
-    public function updateReply($reply, $content)
+    public function updateReply($replyId, $content)
     {   
         $userId = Auth::id(); 
         $validator = Validator::make([
@@ -61,7 +60,7 @@ class ReplyService {
             throw ValidationException::withMessages($validator->errors()->messages());
         }
 
-        $reply = Reply::findOrFail($reply->id); 
+        $reply = Reply::findOrFail($replyId); 
         $reply->content = $content;
         $reply->save(); 
         return $reply;
@@ -74,10 +73,16 @@ class ReplyService {
             $reply = Reply::findOrFail($replyId);
             
             $reply->delete();
+            
+            return 'ok';
           
         } catch (ModelNotFoundException $exception) { 
 
             throw new \Exception('Reply not found.');
+
+            
         }
+
+        
     }
 }
