@@ -1,6 +1,6 @@
 <?php
 
-use Inertia\Inertia;
+use Inertia\Inertia; 
 use App\Models\Reply;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Foundation\Application;
@@ -9,8 +9,13 @@ use App\Http\Controllers\PoemController;
 use App\Http\Controllers\ReplyController;
 use App\Http\Controllers\CommentController;
 use App\Http\Controllers\ProfileController;
-use App\Http\Controllers\UserFollowingController;
-use App\Models\Comment;
+use App\Http\Controllers\UserFollowingController; 
+use App\Http\Controllers\BookController;
+use App\Http\Controllers\PoemController; 
+use App\Http\Controllers\RouteController;
+use App\Http\Controllers\ThoughtController;
+use App\Http\Controllers\UserController;  
+ 
 
 Route::get('/', function () {
     return Inertia::render('Welcome', [
@@ -41,13 +46,9 @@ Route::middleware('auth')->group(function () {
   
 
 });
-
- 
  
    Route::post('/follow', [UserFollowingController::class, 'addFollow'])->name('follow');
-    
- 
-
+     
     Route::get('/csrf-token', function() {
         return response()->json(['csrf_token' => csrf_token()]);
     });
@@ -56,3 +57,4 @@ Route::get('/poems/{id}',  [PoemController::class, 'index'] )->name('poems');
 
 
 require __DIR__.'/auth.php';
+ 

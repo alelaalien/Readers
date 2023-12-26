@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Poem;
 use App\Services\PoemService;
-use Illuminate\Http\Request;
+use Illuminate\Http\Request; 
 use Inertia\Inertia;
 
 class PoemController extends Controller
@@ -34,5 +34,5 @@ class PoemController extends Controller
     public function destroy(Poem $poem)
     {
         
-    }
+    } 
 }

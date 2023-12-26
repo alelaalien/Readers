@@ -9,6 +9,12 @@ use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
+ 
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\HasOne; 
+use Laravel\Fortify\TwoFactorAuthenticatable;
+use Laravel\Jetstream\HasProfilePhoto; 
 
 class User extends Authenticatable
 {
@@ -30,10 +36,12 @@ class User extends Authenticatable
         'password' => 'hashed',
     ];
 
+ 
     // protected $appends = [
     //     'profile_photo_url',
     // ];
 
+ 
     public function books(): HasMany
     {
         return $this->hasMany(Book::class);
@@ -53,10 +61,12 @@ class User extends Authenticatable
     {
         return $this->hasMany(Trade::class);
     }
-    public function location() :BelongsTo
-    {
-        return $this->belongsTo(Location::class, 'location_id');
-    }
+ 
+    // public function location() :BelongsTo
+    // {
+    //     return $this->belongsTo(Location::class, 'location_id');
+    // }
+ 
 
     public function messages() :HasMany
     {
@@ -72,10 +82,12 @@ class User extends Authenticatable
     {
         return $this->hasMany(Poem::class);
     }
-    public function podcasts():HasMany
-    {
-        return $this->hasMany(Podcast::class);
-    }
+ 
+    // public function podcasts():HasMany
+    // {
+    //     return $this->hasMany(Podcast::class);
+    // }
+ 
     public function thoughts():HasMany
     {
         return $this->hasMany(Thought::class);

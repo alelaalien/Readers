@@ -5,11 +5,11 @@ namespace App\Services;
 use App\Models\Poem;
 use Illuminate\Support\Facades\DB;
 
-class PoemService {
-
-  
-    public function showPoems($id )
-    {    
+class PoemService { 
+ 
+    public function showPoems($id)
+    { 
+ 
             return Poem::where('poems.id', $id)
             ->select(
             'poems.title',
@@ -24,12 +24,15 @@ class PoemService {
             )
             ->with([
             'comments' => function ($query) {
+ 
                 $query->select('id', 'user_id', 'content', 'commentable_id', 'commentable_type', 'created_at')
+ 
                     ->orderByDesc('created_at')
                     ->withCount('replies')
                     ->with([
                         'replies' => function ($query) {
-                            $query->select('id', 'user_id', 'content', 'comment_id', 'created_at')
+ 
+                            $query->select('id', 'user_id', 'content', 'comment_id', 'created_at') 
                                 ->with('user:id,name,email_verified_at,profile_photo_path as user_pic');
                         },
                         'replies.user:id,name,email_verified_at,profile_photo_path as user_pic',

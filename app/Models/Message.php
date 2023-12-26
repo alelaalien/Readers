@@ -3,12 +3,14 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Model; 
+use Illuminate\Database\Eloquent\Relations\BelongsTo; 
+ 
 
 class Message extends Model
 {
     use HasFactory;
+ 
  
     protected $table = 'conversations';
     protected $primaryKey = 'id';
@@ -32,4 +34,6 @@ class Message extends Model
     {
         return $this->belongsTo(Conversation::class, 'conversation_id');
     }
+ 
+ 
 }
