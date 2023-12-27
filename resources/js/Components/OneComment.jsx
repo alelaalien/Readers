@@ -11,18 +11,17 @@ import withReactContent from 'sweetalert2-react-content'
 dayjs.extend(relativeTime);
  
 export default function OneComment({comment, auth})
-{
- 
+{ 
     const [showDropdown, setShowDropdown] = useState(false);
     const [isEditing, setIdEditing] = useState(false);
     const [isOpen, setIsOpen] = useState(false);
     const [deleted, setDeleted] = useState(false);
     const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content'); 
+    const regex = /^[a-zA-Z0-9\s\u00C0-\u017F.,:!?¿¡]+$/;
     
     const handleCollapse=() =>{
        setIsOpen(!isOpen);
-    } 
-    
+    }  
  
     const handleEditOptions = () => {
       setShowDropdown(!showDropdown);
@@ -42,31 +41,137 @@ export default function OneComment({comment, auth})
     const handleDelete = async () => {
  
        try {
-    const response = await fetch(`http://127.0.0.1:8000/deleteComment/${comment.id}`, {
-      method: 'DELETE',
-      headers: {
-        'Content-Type': 'application/json','X-CSRF-TOKEN':csrfToken
-       
-      }
-    });
+            const response = await fetch(`http://127.0.0.1:8000/deleteComment/${comment.id}`, {
+                method: 'DELETE',
+                headers: {
+                'Content-Type': 'application/json','X-CSRF-TOKEN':csrfToken
+
+                }
+            });
 
             if (response.ok) { 
             
             if (response.status == 200){
+                
                 setDeleted(true);
             }
             } else {
-                console.error('Error');
+                errorSwal();
             }
         } catch (error) {
-        
+            errorSwal();
+        } 
+    }  
+ 
+//--------------------------------report
+const showSwalReport = (e) => {
+ 
+    withReactContent(Swal).fire({
+        title: "Report Content",
+        text: "Kindly specify the grounds for your report and an administrator of the site will duly review them.",
+        showCancelButton: true,
+        input: "textarea",
+        stopKeydownPropagation: false,
+        inputAttributes: {
+            autocapitalize: "off",
+            className: 'form-control',
+            id : `txtReportComment-${comment.id}`,
+            maxlength : 255
+        },
+        didOpen: () => {
+            const textarea = document.querySelector(`textarea[id="txtReportComment-${comment.id}"]`);
+            let count = document.createElement('p');
+            count.style.textAlign = 'center';
+            count.textContent = '0/255' ; 
+            textarea.insertAdjacentElement('afterend', count);
+            textarea.onkeyup = (event) =>{
+                let len =  event.target.value.length
+                count.textContent = len + '/255';  
+            }
+            textarea.focus(); 
+          },
+        confirmButtonColor: "rgb(251, 125, 34)",
+        cancelButtonColor: "#d33",
+        confirmButtonText: "Send report",
+        preConfirm: () => {
+
+            let txtCommentReport =  document.querySelector(`textarea[id="txtReportComment-${comment.id}"]`);
+            
+            let report = txtCommentReport.value;  
+    
+            if(report.trim().length != 0){
+                
+                if (!regex.test(report)) {
+                      
+                    Swal.showValidationMessage('The string contains unauthorized characters');  
+                }
+
+            }else{ 
+                Swal.showValidationMessage('First input missing'); 
+            } 
+ 
+          }, 
+      }).then((result) => {
+
+        if (result.isConfirmed) {
+
+            handleReport(result.value);
         }
-     
-    }
-  
-    const handleReport = () => {
-      
+    })
+  }
+
+    const handleReport = async (report) => {
+
+     let classType =   "App\\Models\\Comment"  ;
+
+      console.log(classType);
+        try {
+            
+        const response = await fetch('http://127.0.0.1:8000/addReport',{
+                headers : {
+                    'Content-Type' : 'application/json',
+                    'X-CSRF-TOKEN' : csrfToken
+                },
+                method : 'POST',
+                body : JSON.stringify({
+                    reason : report,
+                    item : classType,
+                    itemId : comment.id
+                })
+            });
+
+        const result = await response.json();
+
+            console.log(result);
+        result == 'ok' ? successSwal() : errorSwal();
+
+        } catch (error) {
+           
+            errorSwal();
+        } 
     };
+
+    const successSwal = () =>{
+
+        Swal.fire({
+                position: "center",
+                icon: "success",
+                title: "Done",
+                showConfirmButton: false,
+                timer: 1500
+              });
+    }
+    const errorSwal = () =>{
+
+        Swal.fire({
+                position: "center",
+                icon: "error",
+                title: "Error. Try again later",
+                showConfirmButton: false,
+                timer: 1800
+              });
+    }
+    //--------------------------end report
    
     const sendCommentEditted = async () => {
 
@@ -80,17 +185,15 @@ export default function OneComment({comment, auth})
                 'Content-Type': 'application/json',
                 'X-CSRF-TOKEN' : csrfToken
             },
-            body : JSON.stringify({'content': newContent})
-        
+            body : JSON.stringify({'content': newContent}) 
         }
         
         try {
 
             const response = await fetch(`http://127.0.0.1:8000/updateComment/${comment.id}`, option);
 
-            const result = await response.json();
-
-        console.log(result);
+            // const result = await response.json();
+ 
 
         } catch (error) {
             
@@ -103,32 +206,24 @@ export default function OneComment({comment, auth})
     const discardCommentEditting = () => {
 
         setIdEditing(false);
-    } 
-
- 
+    }  
     
-const showSwal = () => {
-    withReactContent(Swal).fire({
-        title: "Are you sure?",
-        text: "You won't be able to revert this",
-        showCancelButton: true,
-        confirmButtonColor: "#3085d6",
-        cancelButtonColor: "#d33",
-        confirmButtonText: "Yes, delete it!"
-      }).then((result) => {
-        if (result.isConfirmed) {
+    const showSwal = () => {
+        withReactContent(Swal).fire({
+            title: "Are you sure?",
+            text: "You won't be able to revert this",
+            showCancelButton: true,
+            confirmButtonColor: "#3085d6",
+            cancelButtonColor: "#d33",
+            confirmButtonText: "Yes, delete it!"
+        }).then((result) => {
+            if (result.isConfirmed) {
 
-            handleDelete();
-            Swal.fire({
-                position: "center",
-                icon: "success",
-                title: "Done",
-                showConfirmButton: false,
-                timer: 1500
-              });
-        }
-    })
-  }
+                handleDelete();
+                successSwal();
+            }
+        })
+    }
 
 
     if(deleted) { return null;}
@@ -176,9 +271,9 @@ const showSwal = () => {
                                             </Dropdown.Item>
                                         </>
                                 ) : (
-                                        <Dropdown.Item onClick={handleReport}>
+                                        <Dropdown.Item onClick={showSwalReport}>
                                             <h4 className="m-auto text-base">Report</h4> 
-                                            <img src="../img/assets/creaneo.png" alt="Edit" />
+                                            <img src="../img/assets/craneo.png" alt="Report icon" />
                                         </Dropdown.Item>
                                 )}
                                     </Dropdown.Menu>

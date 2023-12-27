@@ -24,7 +24,7 @@ class CommentController extends Controller
 
         // $response = app(CommentService::class)->updatComment($id, $request->content);
 
-        return response()->json( $response);
+        // return response()->json( $response);
     }
  
     public function destroy(string $id)

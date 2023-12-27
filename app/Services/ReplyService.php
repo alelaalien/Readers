@@ -38,7 +38,7 @@ class ReplyService {
 
     public function getRepliesByCommentId($id)
     {
-        return Reply::select('id', 'user_id', 'content', 'comment_id', 'created_at')
+        return Reply::select('id', 'user_id', 'content', 'comment_id', 'created_at', 'updated_at')
         ->with([
             'user:id,name,email_verified_at,profile_photo_path as user_pic',
         ])

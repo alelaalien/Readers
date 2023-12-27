@@ -29,7 +29,7 @@ class PoemService {
                     ->withCount('replies')
                     ->with([
                         'replies' => function ($query) {
-                            $query->select('id', 'user_id', 'content', 'comment_id', 'created_at')
+                            $query->select('id', 'user_id', 'content', 'comment_id', 'created_at', 'updated_at')
                                 ->with('user:id,name,email_verified_at,profile_photo_path as user_pic');
                         },
                         'replies.user:id,name,email_verified_at,profile_photo_path as user_pic',

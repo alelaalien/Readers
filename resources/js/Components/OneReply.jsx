@@ -8,13 +8,27 @@ import withReactContent from 'sweetalert2-react-content'
 dayjs.extend(relativeTime);
 
 export default function OneReply({reply, auth})
-{
+{ 
+
+    let updatedBefore = false;
+
+    let created =  new Date(reply.created_at);
+
+    let updated = new Date(reply.updated_at);
+
+    if(created.getTime() !== updated.getTime()) 
+    {
+        updatedBefore = true;
+    }  
     
     const [showDropdown, setShowDropdown] = useState(false);
     const [isEditing, setIdEditing] = useState(false);
     const [isOpen, setIsOpen] = useState(false);
     const token = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
     const [deleted, setDeleted] = useState(false);
+    const [content, setContent] = useState(reply.content);
+    const [isEdited, setIsEdited] = useState(updatedBefore);
+    const regex = /^[a-zA-Z0-9\s\u00C0-\u017F.,:!?¿¡]+$/;
 
     const handleCollapse=() =>{
        setIsOpen(!isOpen);
@@ -22,10 +36,7 @@ export default function OneReply({reply, auth})
     const handleEditOptions = () => {
       setShowDropdown(!showDropdown);
     }; 
-  
-    const handleReport = () => {
-      
-    }; 
+   
 
     const errorSwall = () => {
 
@@ -57,34 +68,34 @@ export default function OneReply({reply, auth})
         
         setIdEditing(false);
 
-        let newContent = document.getElementById(`newContent${reply.id}`).value;
- 
+        let txtarea = document.getElementById(`newContent${reply.id}`);
 
-        let option = { 
-
+        let newContent = txtarea.value;
+        
+        let option = {  
             method : 'PUT',
             headers:{
                 'Content-Type': 'application/json',
                 'X-CSRF-TOKEN' : token
             },
-            body : JSON.stringify({'content': newContent})
-        
+            body : JSON.stringify({'content': newContent}) 
         }
         
         try {
 
             const response = await fetch(`http://127.0.0.1:8000/updateReply/${reply.id}`, option);
 
-            const result = await response.json();
+            const result = await response.json(); 
 
-        console.log(result);
+            setContent(result.content);
+            
+            setIsEdited(true);
 
         } catch (error) {
             
             console.error(error);
         }
-  
-
+   
     }
 
     const handleEditFalse = () => {
@@ -95,6 +106,108 @@ export default function OneReply({reply, auth})
         
         setIdEditing(!isEditing);
     };
+    //-------------------report------------------------------------
+    //--------------------------------report
+const showSwalReport = (e) => {
+ 
+    withReactContent(Swal).fire({
+        title: "Report Content",
+        text: "Kindly specify the grounds for your report and an administrator of the site will duly review them.",
+        showCancelButton: true,
+        input: "textarea",
+        stopKeydownPropagation: false,
+        inputAttributes: {
+            autocapitalize: "off",
+            className: 'form-control',
+            id : `txtReportReply-${reply.id}`,
+            maxlength : 255
+        },
+        didOpen: () => {
+            const textarea = document.querySelector(`textarea[id="txtReportReply-${reply.id}"]`);
+            let count = document.createElement('p');
+            count.style.textAlign = 'center';
+            count.textContent = '0/255' ; 
+            textarea.insertAdjacentElement('afterend', count);
+            textarea.onkeyup = (event) =>{
+                let len =  event.target.value.length
+                count.textContent = len + '/255';  
+            }
+            textarea.focus(); 
+          },
+        confirmButtonColor: "rgb(251, 125, 34)",
+        cancelButtonColor: "#d33",
+        confirmButtonText: "Send report",
+        preConfirm: () => {
+
+            let txtReplyReport =  document.querySelector(`textarea[id="txtReportReply-${reply.id}"]`);
+            
+            let report = txtReplyReport.value;  
+    
+            if(report.trim().length != 0){
+                
+                if (!regex.test(report)) {
+                      
+                    Swal.showValidationMessage('The string contains unauthorized characters');  
+                }
+
+            }else{ 
+                Swal.showValidationMessage('First input missing'); 
+            } 
+ 
+          }, 
+      }).then((result) => {
+
+        if (result.isConfirmed) {
+
+ 
+            handleReport(result.value);
+        }
+    })
+  }
+
+    const handleReport = async (report) => {
+   let classType =   "App\\Models\\Reply"  ;
+
+      console.log(report);
+        try {
+
+        let option = {
+                headers : {
+                    'Content-Type' : 'application/json',
+                    'X-CSRF-TOKEN' : token
+                },
+                method : 'POST',
+                body : JSON.stringify({
+                    reason : report,
+                    item : classType,
+                    itemId : reply.id
+                })
+            }
+             console.log(option);
+        const response = await fetch('http://127.0.0.1:8000/addReport',option);
+
+        const result = await response.json();
+
+           
+        result == 'ok' ? confirmationSwall() : errorSwal();
+
+        } catch (error) {
+            
+            errorSwal();
+        } 
+    };
+
+    const errorSwal = () =>{
+
+        Swal.fire({
+                position: "center",
+                icon: "error",
+                title: "Error. Try again later",
+                showConfirmButton: false,
+                timer: 1800
+              });
+    }
+
     //--------------------delete-----------------------------------
 
     const handleDelete = async () => {
@@ -117,10 +230,7 @@ export default function OneReply({reply, auth})
 
             return false;
         }
-    };
-
-
-    
+    }; 
     const showSwal = () => {
         withReactContent(Swal).fire({
             title: "Are you sure?",
@@ -165,7 +275,13 @@ export default function OneReply({reply, auth})
             {/* col-2 */}
                     <div className="card-items"> 
                         <div>
-                            <div className="capitalize"> {reply.user.name } </div>
+                            <div className="capitalize"> {reply.user.name }
+                                
+                            </div>
+                            {isEdited ?(
+                            <span className="text-muted absolute" 
+                            style={{marginLeft: '2%', fontSize: '10px', top: '16%', right: '10%'}}
+                            >edited</span> ):''}
                             {/*----------------- boton de edicion---------------  */}
                             {auth.user != null && auth.user.id && (
                                 <>
@@ -193,9 +309,9 @@ export default function OneReply({reply, auth})
                                             </Dropdown.Item>
                                         </>
                                 ) : (
-                                        <Dropdown.Item onClick={handleReport}>
+                                        <Dropdown.Item onClick={showSwalReport}>
                                             <h4 className="m-auto text-base">Report</h4> 
-                                            <img src="../img/assets/creaneo.png" alt="Edit" />
+                                            <img src="../img/assets/craneo.png" alt="Edit" />
                                         </Dropdown.Item>
                                 )}
                                     </Dropdown.Menu>
@@ -209,14 +325,14 @@ export default function OneReply({reply, auth})
                         {/* ------------------contenido------------------------ */}
                             {isEditing   ? (
                                 <>
-                                    <textarea id={`newContent${reply.id}`} defaultValue={reply.content } className="form-control"/>
+                                    <textarea id={`newContent${reply.id}`} defaultValue={content} className="form-control"/>
                                     <div className="text-right">
                                         <button className="btn m-1 btn--save" onClick={sendReplyEdited}> Save changes </button>
                                         <button className="btn m-1 btn--discard" onClick={discardreplyEditting}> Discard</button> 
                                     </div>
                                 </>
                             ) : 
-                                (<p className="mb-1 capitalize">  {reply.content }  </p>)
+                                (<p className="mb-1 capitalize" id={`contentreply-${reply.id}`}>  {content }  </p>)
                             }
                         
                         </div>

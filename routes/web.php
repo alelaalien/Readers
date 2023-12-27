@@ -1,14 +1,12 @@
 <?php
 
 use Inertia\Inertia;
-use App\Models\Reply;
 use Illuminate\Support\Facades\Route;
-use Illuminate\Foundation\Application;
-use App\Http\Middleware\CorsMiddleware;
 use App\Http\Controllers\PoemController;
 use App\Http\Controllers\ReplyController;
 use App\Http\Controllers\CommentController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\ReportableController;
 use App\Http\Controllers\UserFollowingController;
 use App\Models\Comment;
 
@@ -38,7 +36,10 @@ Route::middleware('auth')->group(function () {
   Route::post('/addReply', [ReplyController::class, 'store'])->name('addReply'); 
   Route::delete('/deleteReply/{id}', [ReplyController::class, 'destroy'])->name('deleteReply');
   Route::put('/updateReply/{id}', [ReplyController::class, 'update'])->name('updateReply');
-  
+//reports
+Route::post('/addReport', [ReportableController::class, 'store'])->name('addReport');
+Route::delete('/cancelReport/{id}', [ReportableController::class, 'destroy'])->name('cancelReport');
+Route::get('/itemReport/{item}', [ReportableController::class, 'show'])->name('itemReport');
 
 });
 

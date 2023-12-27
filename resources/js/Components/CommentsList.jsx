@@ -53,9 +53,7 @@ const sendComment = async (e) => {
       console.error('There was a problem with the fetch operation:', error);
     }); 
 };
- 
-
-    
+  
   return (
     
     <div style={{marginTop: '4%'}}>  
