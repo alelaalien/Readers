@@ -53,7 +53,8 @@ Route::get('/itemReport/{item}', [ReportableController::class, 'show'])->name('i
         return response()->json(['csrf_token' => csrf_token()]);
     });
     
-Route::get('/poems/{id}',  [PoemController::class, 'index'] )->name('poems');
+Route::get('/poem/{id}',  [PoemController::class, 'poem'] )->name('poem');
+Route::get('/poems',  [PoemController::class, 'index'] )->name('showPoems');
 
 
 require __DIR__.'/auth.php';

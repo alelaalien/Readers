@@ -26,7 +26,7 @@ const Vision = () =>{
     }, []);  
 
     return (
-        <div className="w-full text-center bg-black h-64 absolute top-0" style={{padding: '7%', color: 'wheat', position: 'inherit'}}>
+        <div className="w-full text-center  h-64 absolute top-0" style={{padding: '7%', color: 'wheat', position: 'inherit', background: '#884646ed'}}>
             <div className="container text-center">
                 {token ?(<input type="hidden" id="csrf" value={token}/>): null}
                 <h1 className="txt--maxlight">Online Store</h1>      

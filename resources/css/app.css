@@ -7,6 +7,12 @@ color: rgb(5, 5, 189);
 text-decoration: underline;
 }
 
+.poemContent{
+  background: #ccc;
+  background: linear-gradient(0deg, #595858, #000);
+  -webkit-text-fill-color: transparent;
+  -webkit-background-clip: text;
+}
 .replies-count{
   color:rgba(33, 37, 41, 0.74);
   text-decoration: none;

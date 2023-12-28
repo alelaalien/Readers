@@ -7,8 +7,17 @@ use Illuminate\Support\Facades\DB;
 
 class PoemService {
 
+    public function showPoems()
+    { 
+
+        return Poem::select('poems.*', 'users.name', 'users.id as user_id', 'users.profile_photo_path as user_pic')
+        ->leftJoin('users', 'users.id', '=', 'poems.user_id')
+        ->where('poems.is_public', 1)
+        ->get();
+        
+    }
   
-    public function showPoems($id )
+    public function poem($id)
     {    
             return Poem::where('poems.id', $id)
             ->select(

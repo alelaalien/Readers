@@ -146,7 +146,7 @@ const NavContainer = styled.nav`
     } 
   }
   padding: .4rem;
-  background-color: #333;
+  background-color:   #46311f;;
   display: flex;
   align-items: center;
   width:100%;
@@ -235,7 +235,7 @@ const NavContainer = styled.nav`
       
     }
   }
-  
+
  
   @media (min-width: 769px) {
     .max-search {
@@ -292,7 +292,7 @@ a.min-bar{
 `
 const Menu = styled.div`
 .dropdown-menu.show{
-  background: #333;
+  background: #46311f;;
 }
 h4{
   font-size: 1.2rem;
