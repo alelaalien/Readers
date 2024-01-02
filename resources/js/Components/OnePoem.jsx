@@ -5,6 +5,7 @@ import Statics from "./Statistics";
 export default function OnePoem({poem, onClickFromParent})
 {    
     
+    console.log(poem);
     const viewRelated =(e)=>{
 
          onClickFromParent(e.target.innerText);   

@@ -14,6 +14,6 @@ class Tag extends Model
 
     public function poems():BelongsToMany
     {
-        return $this->belongsToMany(Poem::class, 'poema_tag', 'poem_id', 'tag_id');
+        return $this->belongsToMany(Poem::class, 'poem_tags', 'poem_id', 'tag_id');
     }
 }

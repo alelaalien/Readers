@@ -13,10 +13,8 @@ export default function PoemIndex({poems, tags, auth})
   
     const handleClickFromChild = (tag) => {
       
-        console.log('Información recibida del hijo:', tag);
-
-        newList(tag);
-
+        console.log('Información recibida del hijo:', tag); 
+        newList(tag); 
     }
 
     const newList = async (tag) =>{
@@ -33,8 +31,7 @@ export default function PoemIndex({poems, tags, auth})
 
         const result = await response.json();
        
-        setPoemsList(result.poems);
-
+        setPoemsList(result.poems); 
     }
     
     return(
@@ -55,8 +52,7 @@ export default function PoemIndex({poems, tags, auth})
                     } 
                     </div> 
                 </div>
-                <div className='col-lg-2'>
-
+                <div className='col-lg-2'> 
                 </div>
             </div>
         </div> 

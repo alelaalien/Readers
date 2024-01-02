@@ -61,10 +61,10 @@ class PoemService {
     {
         if(is_array($tag))
         {
-           return Poem::leftJoin('poema_tag', 'poems.id', '=', 'poema_tag.poem_id')
-            ->whereIn('poema_tag.tag_id', $tag)
+           return Poem::leftJoin('poem_tags', 'poems.id', '=', 'poem_tags.poem_id')
+            ->whereIn('poem_tags.tag_id', $tag)
             ->groupBy('poems.id')
-            ->havingRaw('COUNT(DISTINCT poema_tag.tag_id) <= 2')
+            ->havingRaw('COUNT(DISTINCT poem_tags.tag_id) <= 2')
             ->select('poems.*')
             ->where('poems.is_public', 1)
             ->with('tags')

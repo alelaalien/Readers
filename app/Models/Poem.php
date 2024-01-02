@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\HasManyThrough;
 use Illuminate\Database\Eloquent\Relations\MorphMany;
 
 class Poem extends Model
@@ -24,9 +25,14 @@ class Poem extends Model
     {
         return $this->morphMany(Comment::class, 'commentable');
     }
-    public function tags():BelongsToMany
+    public function poemTags(): BelongsToMany
     {
-        return $this->belongsToMany(Tag::class, 'poema_tag', 'tag_id', 'poem_id');
+        return $this->belongsToMany(Tag::class, 'poem_tags', 'poem_id', 'tag_id');
+    }
+
+    public function tags():HasManyThrough
+    {
+        return $this->hasManyThrough(Tag::class, PoemTag::class, 'poem_id', 'id', 'id', 'tag_id');
     }
  
     public static $rules = [
