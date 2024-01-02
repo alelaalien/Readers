@@ -1,5 +1,4 @@
-import React, { useState,useEffect } from "react";
-import { Form } from "react-bootstrap";
+import React, { useState,useEffect } from "react"; 
 
 export default function ReactionBar({auth, poem}) {
 
@@ -7,14 +6,18 @@ export default function ReactionBar({auth, poem}) {
   const [heartChecked, setHeartChecked] = useState(false);
   const [favoritesChecked, setFavoritesChecked] = useState(false);
   const [followUserChecked, setFollowUserChecked] = useState(false);
+
+  const token = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
  
   const handleFavoritesChange = () => {
+
+    if(auth.user)
     setFavoritesChecked(!favoritesChecked);
   };
 
  
   const handleHeartChange = (e) => {
-    
+    if(auth.user)
    setHeartChecked(!heartChecked);
     
   };
@@ -23,23 +26,16 @@ export default function ReactionBar({auth, poem}) {
   
     e.preventDefault();
  
-  fetch('http://127.0.0.1:8000/csrf-token')
-    .then(response => {
-      if (!response.ok) {
-        throw new Error('Network response was not ok');
-      }
-      return response.json();
-    })
-    .then(data => {
-      const csrfToken = data.csrf_token;
       const requestOptions = {
         method: 'post',
        
         credentials: 'same-origin',
-        headers: {'X-CSRF-TOKEN': csrfToken, 'Content-Type': 'application/json'},
+        headers: {'X-CSRF-TOKEN': token, 'Content-Type': 'application/json'},
         body:JSON.stringify({followed_id: poem.user_id })
 
       }
+ 
+     if(auth.user){
       fetch('http://127.0.0.1:8000/follow', requestOptions)
           .then(response => {
              
@@ -53,17 +49,11 @@ export default function ReactionBar({auth, poem}) {
           .catch(error => {
           
             console.error('Error al realizar la solicitud:/', error);
-          });
-    })
-  .catch(error => {
-    console.error('There was a problem with the fetch operation:', error);
-  });
+          });}
+    
   
   };
- 
   
- 
-
   return (
     <div className="w-full text-right" style={{ background: "#eee" }}>
       <div className="text-right flex">

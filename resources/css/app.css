@@ -2,9 +2,39 @@
 @tailwind components;
 @tailwind utilities;
 
+.scalable:hover{
+  transform: scale(1.5);
+}
+.main-row{
+  @media(max-width : 992px) {
+    max-width: 95%;
+  margin: auto!important;
+  }
+}
+
+.cat-handler:hover{
+  background:black;
+}
+
+.btn-brown:hover{
+  background: #b56a3c !important;
+  
+}
+.btn-brown{
+  background: #5e371f!important;
+  color: white!important;
+  width: 40%;
+  margin: auto;
+}
 .replies-count:hover{
 color: rgb(5, 5, 189);
 text-decoration: underline;
+}
+
+.tag-list:hover{
+  background: rgb(199,190,86)!important;
+  cursor: pointer;
+background: linear-gradient(0deg, rgba(199,190,86,1) 0%, rgba(255,255,255,0.11806720979407392) 50%, rgba(199,190,86,1) 100%)!important;
 }
 
 .poemContent{

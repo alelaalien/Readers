@@ -3,9 +3,10 @@
 namespace App\Http\Controllers;
 
 use App\Models\Poem;
-use App\Services\PoemService;
-use Illuminate\Http\Request;
 use Inertia\Inertia;
+use App\Services\TagService;
+use Illuminate\Http\Request;
+use App\Services\PoemService;
 
 class PoemController extends Controller
 {
@@ -15,7 +16,9 @@ class PoemController extends Controller
         
         $poems = app(PoemService::class)->showPoems(); 
 
-        return Inertia::render('Poems/index', ['poems' => $poems]);
+        $tags = app(TagService::class)->tagsAndPoems();
+
+        return Inertia::render('Poems/index', ['poems' => $poems, 'tags' => $tags]);
    
     }
     public function poem($id)
@@ -26,6 +29,13 @@ class PoemController extends Controller
         $comments = $poem->comments;
 
         return Inertia::render('Poems/poems', ['poem' => $poem, 'comments' => $comments]);
+    }
+
+    public function poemsByTag(Request $request)
+    {
+        $poems = app(PoemService::class)->showPoemsByTag($request->tag); 
+
+        return response()->json(['poems' => $poems]);
     }
 
     

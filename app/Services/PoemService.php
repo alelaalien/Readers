@@ -13,6 +13,7 @@ class PoemService {
         return Poem::select('poems.*', 'users.name', 'users.id as user_id', 'users.profile_photo_path as user_pic')
         ->leftJoin('users', 'users.id', '=', 'poems.user_id')
         ->where('poems.is_public', 1)
+        ->with('tags')
         ->get();
         
     }
@@ -54,6 +55,25 @@ class PoemService {
     public function count($user_id)
     {
        return Poem::where('user_id', $user_id)->pluck('id');
+    }
+
+    public function showPoemsByTag($tag)
+    {
+        if(is_array($tag))
+        {
+           return Poem::leftJoin('poema_tag', 'poems.id', '=', 'poema_tag.poem_id')
+            ->whereIn('poema_tag.tag_id', $tag)
+            ->groupBy('poems.id')
+            ->havingRaw('COUNT(DISTINCT poema_tag.tag_id) <= 2')
+            ->select('poems.*')
+            ->where('poems.is_public', 1)
+            ->with('tags')
+            ->get();
+
+        }else
+        {
+
+        }
     }
  
 }

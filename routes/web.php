@@ -41,11 +41,13 @@ Route::post('/addReport', [ReportableController::class, 'store'])->name('addRepo
 Route::delete('/cancelReport/{id}', [ReportableController::class, 'destroy'])->name('cancelReport');
 Route::get('/itemReport/{item}', [ReportableController::class, 'show'])->name('itemReport');
 
+//reactions
+Route::post('/follow', [UserFollowingController::class, 'addFollow'])->name('follow');
 });
 
  
  
-   Route::post('/follow', [UserFollowingController::class, 'addFollow'])->name('follow');
+   
     
  
 
@@ -55,6 +57,6 @@ Route::get('/itemReport/{item}', [ReportableController::class, 'show'])->name('i
     
 Route::get('/poem/{id}',  [PoemController::class, 'poem'] )->name('poem');
 Route::get('/poems',  [PoemController::class, 'index'] )->name('showPoems');
-
-
+Route::post('/poemsList',  [PoemController::class, 'poemsByTag'] )->name('poemsList');
+ 
 require __DIR__.'/auth.php';

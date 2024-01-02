@@ -1,42 +1,68 @@
-import React from 'react';
+import React, { useState } from 'react';
 import Guest from '@/Layouts/GuestLayout';
 import OnePoem from '@/Components/OnePoem';
+import CategoryNav from '@/Components/CategoryNav';
 
-export default function PoemIndex({poems, auth})
-{
-    console.log(poems);
+
+export default function PoemIndex({poems, tags, auth})
+{   
+  
+    const [poemsList, setPoemsList] = useState(poems);
+    const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content'); 
+
+  
+    const handleClickFromChild = (tag) => {
+      
+        console.log('Información recibida del hijo:', tag);
+
+        newList(tag);
+
+    }
+
+    const newList = async (tag) =>{
+
+        const options = {
+            headers:{
+                'Content-Type' : 'application/json',
+                'X-CSRF-TOKEN' : csrfToken 
+            },
+            method : 'POST',
+            body: JSON.stringify({'tag' : tag}) 
+        }
+        const response = await fetch(`http://127.0.0.1:8000/poemsList`, options);
+
+        const result = await response.json();
+       
+        setPoemsList(result.poems);
+
+    }
+    
     return(
         <Guest  auth={auth}> 
-
-            <div className="flex flex-row">
-                {/* Primera columna */}
-                <div className="w-1/5 bg-gray-200">
-                    {/* Lista de categorías */}
-                    <ul className="py-4">
-                    <li className="px-2 py-1">Categoría 1</li>
-                    <li className="px-2 py-1">Categoría 2</li>
-                    <li className="px-2 py-1">Categoría 3</li>
-                    {/* Agrega más elementos de la lista si es necesario */}
-                    </ul>
-                </div>
-
-                {/* Segunda columna */}
-                <div className="w-4/5" style={{background: 'white'}}>
+        <div className='container-fluid' style={{background: 'white'}}>
+            <div className='row main-row'>
+              
+                    <CategoryNav className='col-md-2' tags={tags}  onClickFromParent={handleClickFromChild}/> 
+         
+                <div className='col-lg-7 col-sm-12'>
+                  
+                    <div className="row" style={{background: 'white'}}>
                     {
-                        poems.map(element=> 
+                        poemsList.map(element=> 
                            ( 
-                           <OnePoem key={element.id} poem={element}/>)
+                           <OnePoem key={`one-poem-${element.id}`} poem={element}  onClickFromParent={handleClickFromChild}/>)
                            ) 
                     } 
+                    </div> 
                 </div>
+                <div className='col-lg-2'>
 
-                {/* Tercera columna */}
-                <div className="w-1/5" style={{background: 'white'}}>
-                    {/* Contenido de la tercera columna */}
                 </div>
             </div>
- 
+        </div> 
         </Guest>
     );
 
 }
+
+

@@ -1,42 +1,58 @@
 import React, { useEffect, useState } from "react";
+import Statics from "./Statistics";
 
-export default function OnePoem({poem})
-{   
-    const [content, setContent] = useState('');
+
+export default function OnePoem({poem, onClickFromParent})
+{    
+    
+    const viewRelated =(e)=>{
+
+         onClickFromParent(e.target.innerText);   
+    }
 
     useEffect(() =>{
        
         let result = poem.content.substring(1, 250);
 
         let val = result.replace(/(\r\n|\n|\r)/gm, "");
-       console.log(val);
+      
         document.getElementById(`poemContent-${poem.id}`).innerText = val+'...';
     
-    }, []);
- 
- 
- 
-
+    }, []); 
+  
     return(
-            <div style={{background:'white', height: '250px', padding:'2%', marginTop: '15px', borderRadius : '0.65rem',background: 'linear-gradient(90deg, rgb(226, 210, 232) 0%, rgba(249, 237, 64, 0.35) 50%, rgba(68, 31, 12, 0.72) 100%)'}}>                
+            <div className="col-lg-12" style={{background:'white', height: '250px', padding:'2%', marginTop: '15px', borderRadius : '0.65rem',background: 'linear-gradient(90deg, rgb(226, 210, 232) 0%, rgba(249, 237, 64, 0.35) 50%, rgba(68, 31, 12, 0.72) 100%)'}}>                
             <div className="flex flex-row"
-                style={{background: '#ffffffa8',borderRadius: '1rem', padding: '12px'}}> 
-           
+                style={{background: '#ffffffa8',borderRadius: '1rem', padding: '12px'}}>  
                     <div>
                         <div className="flex" style={{justifyContent: 'space-between'}}>
                             <h4 className="w-full text-center">{poem.title}</h4> 
                             <span className="text-muted">12-12-2012</span>
                         </div> 
                         <p className="poemContent text-justify mb-0" id={`poemContent-${poem.id}`}></p> 
-                        <div className="w-full" style={{justifyContent: 'space-between'}}>
-                           <a href="" className="w-6/12 inline-flex"><h5>El autor </h5></a> 
-                           <a href={`/poem/${poem.id}`}><button className="btn">View</button> </a>
-                        </div>
-                        
+                        <div className="w-full flex" style={{justifyContent: 'space-between'}}>
+                           <a href="" className="w-6/12 inline-flex"><h5>El autor </h5></a>  
+                        </div> 
                     </div>
                 </div>  
-                <div style={{justifyContent: 'space-between'}}>
-                   <label className="rounded-lg bg-teal-400 mt-2" style={{padding: '0.5%', margin: '10px 15px 0 2px'}}>lala</label><label>lala</label><label>lala</label> 
+                <div className="text-center" style={{justifyContent: 'space-between'}}>
+               
+                        {
+                            poem.tags.map(element=> (
+                                <label style={{background: '#5b4e3d'}} key={`tag-poem-${element.tag_id}`} className="rounded-lg p-0.5 m-10 mx-15 my-0 ml-2 mt-10 bg-77564e text-white mt-2 cursor-pointer"
+                                onClick={viewRelated}>{element.tag}</label> 
+                            ))
+
+                        }
+                   
+                            
+                </div>
+                <div className="flex" style={{justifyContent: 'space-between'}}>
+                    <Statics></Statics>
+                    <div style={{width: 'fit-content'}}>
+                        <a href={`/poem/${poem.id}`}><button className="btn">View</button></a>
+                        <a href="#"><button className="btn">View Later</button></a>
+                    </div>
                 </div>
                 
             </div> 
