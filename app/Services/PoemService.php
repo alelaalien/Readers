@@ -72,7 +72,13 @@ class PoemService {
 
         }else
         {
-
+            return Poem::leftJoin('poem_tags', 'poems.id', '=', 'poem_tags.poem_id') 
+            ->groupBy('poems.id') 
+            ->select('poems.*')
+            ->where('poems.is_public', 1)
+            ->where('poem_tags.tag_id', $tag)
+            ->with('tags')
+            ->get();
         }
     }
  

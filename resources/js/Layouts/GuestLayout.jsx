@@ -3,9 +3,11 @@ import { Link } from '@inertiajs/react';
 import Vision from '@/Components/Main/Vision'; 
 import ResponsiveNavLink from '@/Components/ResponsiveNavLink';
 import NavBar from '@/Components/Main/NavBar';
+import Footer from '@/Components/Main/Foot';
 
 export default function Guest({ children, auth }) {
     return (
+        <>
         <div className="min-h-screen flex flex-col sm:justify-center items-center  sm:pt-0 bg-gray-100">
              
                  <Vision/> 
@@ -14,5 +16,7 @@ export default function Guest({ children, auth }) {
                 {children}
             </div>
         </div>
+        <Footer></Footer>
+        </>
     );
 }

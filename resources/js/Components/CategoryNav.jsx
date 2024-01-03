@@ -15,7 +15,7 @@ export default function CategoryNav({tags,  onClickFromParent})
      } 
      const findByTags =(e)=>{
 
-        let cb = document.getElementsByClassName('tags-cb');
+        const cb = document.getElementsByClassName('tags-cb');
 
         let cbArray = Array.from(cb);
         
@@ -76,13 +76,12 @@ export default function CategoryNav({tags,  onClickFromParent})
         <CategoryList className="p-0 select-none">
             <div className="w-full close" style={{height:'25px'}}>
                 <button type="button" onClick={handleClose}
-                    className="close pull-right pr-2 text-4xl font-bold text-gray-600"> &times; </button> 
+                    className="close pull-right pr-2 text-sm font-bold text-gray-600"> &times; </button> 
             </div>
             {/* search */}
             <div className="bg-white select-none"> 
                 <h4 onClick={handleCollapse}  
-                    className="cursor-pointer uppercase text-center pt-1 text-muted"  
-                    data-id="d-id" 
+                    className="cursor-pointer uppercase text-center pt-1 text-muted text-sm"  
                     data-toggle="collapse" 
                     data-target={`#search-bar`} 
                     aria-expanded="false" 
@@ -91,7 +90,7 @@ export default function CategoryNav({tags,  onClickFromParent})
                     <div className="flex">
 
                         <input type="search" placeholder="Search by title..."
-                            className="form-control text-xl" style={{fontSize: '22px'}} aria-label="Search"
+                            className="form-control text-xl" style={{fontSize: '14px'}} aria-label="Search"
                         />
                        
                         <button><img className="scalable" src="../img/assets/lupa.png" alt="search" /></button> 
@@ -101,7 +100,7 @@ export default function CategoryNav({tags,  onClickFromParent})
              {/* tags */}
             <div className="bg-white"> 
                 <h4 onClick={handleTagsCollapse}  
-                    className="cursor-pointer uppercase text-center pt-1 text-muted"   
+                    className="cursor-pointer uppercase text-center pt-1 text-muted text-sm"   
                     data-id="d-id" 
                     data-toggle="collapse" 
                     data-target={`#tags-bar`} 
@@ -157,7 +156,7 @@ const CategoryList = styled.div`
   width: 60%;
   }
   @media (min-width: 992px) {
-    width: 25%;
+  
   background:#ffffffb5; 
   border: 15px double #46311f21;
   .close{

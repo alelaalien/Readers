@@ -38,10 +38,12 @@ export default function PoemIndex({poems, tags, auth})
         <Guest  auth={auth}> 
         <div className='container-fluid' style={{background: 'white'}}>
             <div className='row main-row'>
+
+            <div className='col-lg-3 col-sm-12'>
               
-                    <CategoryNav className='col-md-2' tags={tags}  onClickFromParent={handleClickFromChild}/> 
-         
-                <div className='col-lg-7 col-sm-12'>
+                    <CategoryNav tags={tags}  onClickFromParent={handleClickFromChild}/> 
+         </div>
+                <div className='col-lg-6 col-sm-12'>
                   
                     <div className="row" style={{background: 'white'}}>
                     {
@@ -52,7 +54,8 @@ export default function PoemIndex({poems, tags, auth})
                     } 
                     </div> 
                 </div>
-                <div className='col-lg-2'> 
+                <div className='col-lg-3'> 
+                <div>soy un div</div>
                 </div>
             </div>
         </div> 
