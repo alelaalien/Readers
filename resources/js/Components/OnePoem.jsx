@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import Statics from "./Statistics";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 
 export default function OnePoem({poem, onClickFromParent})
@@ -40,7 +41,7 @@ export default function OnePoem({poem, onClickFromParent})
                
                         {
                             poem.tags.map(element=> (
-                                <label style={{background: '#5b4e3d'}} key={`tag-poem-${element.tag_id}${Math.random()}`} className="rounded-lg p-0.5 m-10 mx-15 my-0 ml-2 mt-10 bg-77564e text-white mt-2 cursor-pointer text-base "
+                                <label style={{background: '#5b4e3d', padding: '1%'}} key={`tag-poem-${element.tag_id}${Math.random()}`} className="rounded-lg p-0.5 m-10 mx-15 my-0 ml-2 mt-10 bg-77564e text-white mt-2 cursor-pointer text-base "
                                 onClick={viewRelated} id={element.id}>{element.tag}</label> 
                             ))
 

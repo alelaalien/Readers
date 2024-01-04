@@ -31,10 +31,26 @@ color: rgb(5, 5, 189);
 text-decoration: underline;
 }
 
+.btn-search{
+  background: #437d7d;
+  color: white;
+  padding: 0 3%;
+  border-radius: 0 0.65rem 0.65rem 0;
+}
+.input-search{
+  border-radius: 0.35rem 0 0 0.35rem!important;
+}
+.btn-cancel:hover{
+background: red!important;
+color: white;
+}
 .tag-list:hover{
-  background: rgb(199,190,86)!important;
+  background: #437d7d;
+  color: white;
+  border-radius: 0.65rem;
   cursor: pointer;
-background: linear-gradient(0deg, rgba(199,190,86,1) 0%, rgba(255,255,255,0.11806720979407392) 50%, rgba(199,190,86,1) 100%)!important;
+  font-weight: bold;
+  border-radius: 0 2.65rem;
 }
 
 .poemContent{

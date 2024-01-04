@@ -4,18 +4,32 @@ import BurguerButton from '../BurguerButton'
 import { Dropdown } from 'react-bootstrap'; 
 import Login from '../Login';
 import { useForm } from '@inertiajs/react';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faHome, faSearch } from '@fortawesome/free-solid-svg-icons';
+import Register from '../Register';
 
 function Navbar({auth}) {
 
   const [clicked, setClicked] = useState(false);
   const [showDropdown, setShowDropdown] = useState(false);
   const [loginBox, setLoginBox] = useState(false);
-  const { post } = useForm({
-    
-});
+  const [registerBox, setRegisterBox] = useState(false);
+  const { post } = useForm({ });
+
+  const handleRegisterBox = () =>{
+    setRegisterBox(!registerBox);
+  }
+
+  const cancelRegister = () =>{
+    setRegisterBox(false);
+  }
   const handleLoginBox = () =>{
 
     setLoginBox(!loginBox);
+  }
+  const cancelLogin = () =>{
+
+    setLoginBox(false);
   }
 
   const handleOptions = () => {
@@ -35,13 +49,15 @@ function Navbar({auth}) {
   return (
     <>
       <NavContainer>
-        <a  className='self-center float-left' onClick={handleClick}>
-          <img src="../img/assets/home.png" alt="home" style={{width: '70px'}} />
+        <a  className='self-center float-left' onClick={handleClick}> 
+          <FontAwesomeIcon icon={faHome}/>
         </a>
         <div className='items-center mini-search w-full' > 
             <form action="" className='float-left self-center mr-4 m-auto w-full' style={{display:'flex'}}>
-              <input  type="search"  placeholder="Search" className="form-control" aria-label="Search" style={{display: 'inline'}}/>
-              <button><img src="../img/assets/lupa.png" alt="search" /></button> 
+              <input  type="search"  placeholder="Search" className="form-control input-search" aria-label="Search" style={{display: 'inline'}}/>
+              <button className='btn-search'>
+                <FontAwesomeIcon icon={faSearch} /> 
+                </button> 
             </form>
           </div> 
 
@@ -49,7 +65,16 @@ function Navbar({auth}) {
          
           <a className='self-center float-left' href="">Poems</a>
           <a className='self-center float-left' href="">Echoes</a>
-          <a className='self-center float-left' href="">Books</a>
+          <a className='self-center float-left' href="">Books</a> 
+          <div className='items-center max-search' > 
+            <form action="" className='float-left self-center mr-4 m-auto w-full' style={{display:'flex'}}>
+              <input  type="search"  placeholder="Search" className="form-control w-full input-search" aria-label="Search" style={{display: 'inline'}}/>
+              <button className='btn-search'>
+              <FontAwesomeIcon icon={faSearch} />
+                {/* <img src="../img/assets/lupa.png" alt="search" /> */}
+                </button> 
+            </form>
+          </div>   
           {auth.user ? (
             <>
             <MiniBar>
@@ -63,7 +88,7 @@ function Navbar({auth}) {
                   Log out
               </a>
             </MiniBar>
-
+            
             <ToggleDiv>
               <Dropdown show={showDropdown} onClick={handleOptions}>
                   <Dropdown.Toggle className="drop-toggle" id="dropdown-basic">
@@ -98,33 +123,30 @@ function Navbar({auth}) {
                 </ToggleDiv>
             </>
           ) : (
-              <>
-                 
+              <div className='flex absolute self-center' style={{right: '22px'}}> 
                   <a style={{color: 'wheat'}}  
                     onClick={handleLoginBox}
                     className="cursor-pointer self-center float-right font-semibold text-gray-600 hover:text-gray-900 dark:text-gray-400 dark:hover:text-white focus:outline focus:outline-2 focus:rounded-sm focus:outline-red-500">
                       Log in
                   </a>
+                  
                   {loginBox && (
                       <LoginBox>
-                        <Login></Login>
+                        <Login handleCancel={cancelLogin}></Login>
                       </LoginBox> 
 
                   )  }
                     
-                  <a  href={route('register')} style={{color: 'wheat'}} className="self-center float-right ms-4 font-semibold text-gray-600 hover:text-gray-900 dark:text-gray-400 dark:hover:text-white focus:outline focus:outline-2 focus:rounded-sm focus:outline-red-500">
+                  <a  onClick={handleRegisterBox} style={{color: 'wheat'}} className="self-center float-right ms-4 font-semibold text-gray-600 hover:text-gray-900 dark:text-gray-400 dark:hover:text-white focus:outline focus:outline-2 focus:rounded-sm focus:outline-red-500">
                       Register
                   </a>
-              </>
+                  {registerBox &&( 
+                    <RegisterBox>
+                      <Register handleCancelRegister={cancelRegister}></Register>
+                    </RegisterBox>
+                   ) }
+              </div>
           )}
-
-         <div className='items-center max-search' > 
-            <form action="" className='float-left self-center mr-4 m-auto w-full' style={{display:'flex'}}>
-              <input  type="search"  placeholder="Search" className="form-control w-full" aria-label="Search" style={{display: 'inline'}}/>
-              <button><img src="../img/assets/lupa.png" alt="search" /></button> 
-            </form>
-          </div> 
-            
         </div>
         <div className='burguer'>
           <BurguerButton clicked={clicked} handleClick={handleClick} />
@@ -155,7 +177,7 @@ const NavContainer = styled.nav`
     color: wheat;
     text-decoration: none;
     margin-right: 1rem;
-    font-size:2rem;
+    font-size:1.5rem;
   }
   .links{
     position: absolute;
@@ -179,12 +201,12 @@ const NavContainer = styled.nav`
       position: initial;
       margin: 0;
       a, form{
-        font-size: 1.3rem;
+        font-size: 1.2rem;
         color: wheat;
         display: inline;
         
       }
-      display: block;
+     
     }
   }
   .links.active{
@@ -273,9 +295,7 @@ right:10px;
 .drop-toggle{
   background: black;
   color: wheat;
-  font-size: 1.3rem;
-  height: 60px;
-  margin-top: -10px;
+ 
   border: 1px solid black;
   border-radius: 0.65rem;
   @media(max-width: 768px){
@@ -314,5 +334,15 @@ position: absolute;
   background: #ececec;
   border: 1px solid #8a8686;
   right: 6px;
+  top: 45%;
+`
+const RegisterBox  =styled.div`
+position: absolute; 
+  width: 400px;
+  padding: 2%;
+  border-radius: 0.65rem;
+  background: #ececec;
+  border: 1px solid #8a8686;
+  right: 0;
   top: 45%;
 `

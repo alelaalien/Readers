@@ -1,12 +1,11 @@
-import { useEffect } from 'react';
-import GuestLayout from '@/Layouts/GuestLayout';
+import { useEffect } from 'react'; 
 import InputError from '@/Components/InputError';
 import InputLabel from '@/Components/InputLabel';
 import PrimaryButton from '@/Components/PrimaryButton';
 import TextInput from '@/Components/TextInput';
 import { Head, Link, useForm } from '@inertiajs/react';
 
-export default function Register() {
+export default function Register({handleCancelRegister}) {
     const { data, setData, post, processing, errors, reset } = useForm({
         name: '',
         email: '',
@@ -26,14 +25,16 @@ export default function Register() {
         post(route('register'));
     };
 
-    return (
-        <GuestLayout>
-            <Head title="Register" />
+    const handleCancel = () =>{
 
+        handleCancelRegister();
+    }
+
+    return (
+        <div> 
             <form onSubmit={submit}>
                 <div>
-                    <InputLabel htmlFor="name" value="Name" />
-
+                    <InputLabel htmlFor="name" value="Name" /> 
                     <TextInput
                         id="name"
                         name="name"
@@ -43,14 +44,11 @@ export default function Register() {
                         isFocused={true}
                         onChange={(e) => setData('name', e.target.value)}
                         required
-                    />
-
+                    /> 
                     <InputError message={errors.name} className="mt-2" />
-                </div>
-
+                </div> 
                 <div className="mt-4">
-                    <InputLabel htmlFor="email" value="Email" />
-
+                    <InputLabel htmlFor="email" value="Email" /> 
                     <TextInput
                         id="email"
                         type="email"
@@ -60,8 +58,7 @@ export default function Register() {
                         autoComplete="username"
                         onChange={(e) => setData('email', e.target.value)}
                         required
-                    />
-
+                    /> 
                     <InputError message={errors.email} className="mt-2" />
                 </div>
 
@@ -77,14 +74,12 @@ export default function Register() {
                         autoComplete="new-password"
                         onChange={(e) => setData('password', e.target.value)}
                         required
-                    />
-
+                    /> 
                     <InputError message={errors.password} className="mt-2" />
                 </div>
 
                 <div className="mt-4">
-                    <InputLabel htmlFor="password_confirmation" value="Confirm Password" />
-
+                    <InputLabel htmlFor="password_confirmation" value="Confirm Password" /> 
                     <TextInput
                         id="password_confirmation"
                         type="password"
@@ -97,21 +92,17 @@ export default function Register() {
                     />
 
                     <InputError message={errors.password_confirmation} className="mt-2" />
-                </div>
+                </div> 
+                <div className="flex items-center justify-end mt-4"> 
 
-                <div className="flex items-center justify-end mt-4">
-                    <Link
-                        href={route('login')}
-                        className="underline text-sm text-gray-600 hover:text-gray-900 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
-                    >
-                        Already registered?
-                    </Link>
-
+                    <PrimaryButton  className="ms-4 bg-red-700 text-white btn-cancel" onClick={handleCancel}>
+                        Cancel
+                    </PrimaryButton>
                     <PrimaryButton className="ms-4" disabled={processing}>
                         Register
                     </PrimaryButton>
                 </div>
             </form>
-        </GuestLayout>
+        </div>
     );
 }

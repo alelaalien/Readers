@@ -6,7 +6,7 @@ import PrimaryButton from '@/Components/PrimaryButton';
 import TextInput from '@/Components/TextInput';
 import {Link, useForm } from '@inertiajs/react';
 
-export default function Login({ status, canResetPassword, auth}) {
+export default function Login({ status, canResetPassword, auth, handleCancel}) {
     const { data, setData, post, processing, errors, reset } = useForm({
         email: '',
         password: '',
@@ -24,6 +24,13 @@ export default function Login({ status, canResetPassword, auth}) {
 
         post(route('login'));
     };
+
+    const cancelLogin = (e) =>{
+
+        e.preventDefault();
+        
+        handleCancel(true);
+    }
 
     return (
         <>  
@@ -85,7 +92,7 @@ export default function Login({ status, canResetPassword, auth}) {
                             Forgot your password?
                         </Link>
                     )}
-                    <PrimaryButton className="ms-4"  style={{background: 'red'}}>
+                    <PrimaryButton onClick={cancelLogin}   className="ms-4 bg-red-700 text-white btn-cancel">
                         Cancel
                     </PrimaryButton>
                  

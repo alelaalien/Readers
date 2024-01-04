@@ -2,6 +2,8 @@ import React, { useState } from 'react';
 import Guest from '@/Layouts/GuestLayout';
 import OnePoem from '@/Components/OnePoem';
 import CategoryNav from '@/Components/CategoryNav';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faHome } from '@fortawesome/free-solid-svg-icons';
 
 
 export default function PoemIndex({poems, tags, auth})
@@ -36,16 +38,17 @@ export default function PoemIndex({poems, tags, auth})
     
     return(
         <Guest  auth={auth}> 
-        <div className='container-fluid' style={{background: 'white'}}>
+        <div className='container-fluid bg-white'>
+             
             <div className='row main-row'>
 
             <div className='col-lg-3 col-sm-12'>
               
                     <CategoryNav tags={tags}  onClickFromParent={handleClickFromChild}/> 
-         </div>
+            </div>
                 <div className='col-lg-6 col-sm-12'>
                   
-                    <div className="row" style={{background: 'white'}}>
+                    <div className="row p-4 bg-white">
                     {
                         poemsList.map(element=> 
                            ( 

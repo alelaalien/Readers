@@ -1,7 +1,9 @@
 import React from "react";
 import { useState, useEffect } from "react";
 import {Collapse} from 'react-collapse'; 
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import styled from 'styled-components';
+import { faSearch } from "@fortawesome/free-solid-svg-icons";
 
 export default function CategoryNav({tags,  onClickFromParent})
 {
@@ -51,12 +53,23 @@ export default function CategoryNav({tags,  onClickFromParent})
 
         cb.checked = !cb.checked;
      }
+
+     const sizeDefinition = () =>{
+
+        const _width = window.innerWidth; 
+
+        _width > 991 ?
+        setCategoriesHidden(false):
+        setCategoriesHidden(true);
+     }
+
      useEffect(() => {
+
+         sizeDefinition();
+
         const handleResize = () => {
-            const _width = window.innerWidth;
-            _width > 991 ?
-            setCategoriesHidden(false):
-            setCategoriesHidden(true);
+           
+            sizeDefinition();
         };
     
         window.addEventListener('resize', handleResize);
@@ -90,10 +103,12 @@ export default function CategoryNav({tags,  onClickFromParent})
                     <div className="flex">
 
                         <input type="search" placeholder="Search by title..."
-                            className="form-control text-xl" style={{fontSize: '14px'}} aria-label="Search"
+                            className="form-control text-xl input-search" style={{fontSize: '14px'}} aria-label="Search"
                         />
                        
-                        <button><img className="scalable" src="../img/assets/lupa.png" alt="search" /></button> 
+                        <button className="btn-search">
+                            <FontAwesomeIcon icon={faSearch} ></FontAwesomeIcon>
+                            </button> 
                     </div>
                 </Collapse>
              </div>
@@ -109,18 +124,16 @@ export default function CategoryNav({tags,  onClickFromParent})
                 <Collapse isOpened={isTagsOpen} style= {{marginTop:'10px'}}  id="tags-bar" >  
                         <div className="overflow-y-scroll" style={{maxHeight: '575px'}}> 
                             {/* Lista de categorías */}
-                            <ul className="m-0 p-0" style={{border: '6px double #a8a6a6'}}>
+                            <ul className="m-0 p-0">
                             {
                                 tags.map(element =>(
                                     <li className="px-2 py-1 text-center text-gray-500 capitalize tag-list" key={`tag-li-${element.tag_id}${Math.random()}`}
-                                    style={{background: 'rgb(212,211,210)',
-                                        background: 'linear-gradient(0deg, rgba(212,211,210,1) 0%, rgba(255,255,255,0.11806720979407392) 50%, rgba(212,211,210,1) 100%)'}}
-                                        onClick={checkTag}
-                                    >
-                                        <div className=''> 
+                                        onClick={checkTag}>
+                                            {/* style={{borderBottom: '1px solid #ddd'}} */}
+                                        <div className='m-0 p-1'> 
                                             {element.tag} <input type="checkbox" className='pull-right  tags-cb' style={{color: '#975d2a'}} value={element.tag_id} /> 
                                         </div>
-                                        
+                                        <hr className="p-0" style={{width: '200px', margin: '0 auto'}} />
                                     </li>
                                 ))
                             } 
@@ -151,14 +164,14 @@ const CategoryList = styled.div`
   background:#ffffffb5;
   height: 100vh;
   z-index: 200;
-  border: 15px double #46311f21;
+
   left: 0;
   width: 60%;
   }
   @media (min-width: 992px) {
   
   background:#ffffffb5; 
-  border: 15px double #46311f21;
+
   .close{
     display:none;
   }
