@@ -11,6 +11,8 @@ export default function CategoryNav({tags,  onClickFromParent})
     const [isTagsOpen, setIsTagsOpen] = useState(true);
     const [categoriesHidden, setCategoriesHidden] = useState(true);
     const [listHandlerVisible, setListHandlerVisible] = useState(true);
+    const [tagList, setTagList] = useState(tags);
+    const allTags = tags;
     
     const handleCollapse=() =>{
         setIsOpen(!isOpen);
@@ -49,7 +51,7 @@ export default function CategoryNav({tags,  onClickFromParent})
      }
 
      const checkTag = (e) =>{
-        let cb = e.target.children[0];
+        const cb = e.target.children[0];
 
         cb.checked = !cb.checked;
      }
@@ -79,7 +81,21 @@ export default function CategoryNav({tags,  onClickFromParent})
           window.removeEventListener('resize', handleResize);
         };
       }, []);  
-    
+      
+      const filterTags = (e) =>{
+ 
+        let txt = e.target.value; 
+
+        const list = allTags.filter((tag) => 
+
+        tag.tag.toLowerCase().includes(txt.toLowerCase()))
+       
+        setTagList(list);
+      }
+
+    const cbEvent = (e) =>{
+        console.log(e.target);
+    }
 
     return(
         <>
@@ -104,8 +120,7 @@ export default function CategoryNav({tags,  onClickFromParent})
 
                         <input type="search" placeholder="Search by title..."
                             className="form-control text-xl input-search" style={{fontSize: '14px'}} aria-label="Search"
-                        />
-                       
+                        /> 
                         <button className="btn-search">
                             <FontAwesomeIcon icon={faSearch} ></FontAwesomeIcon>
                             </button> 
@@ -122,16 +137,22 @@ export default function CategoryNav({tags,  onClickFromParent})
                     aria-expanded="false"
                     >tags</h4>
                 <Collapse isOpened={isTagsOpen} style= {{marginTop:'10px'}}  id="tags-bar" >  
+                    <input type="text" className="form-control" onKeyUp={filterTags} placeholder="Filter tag..."/>
                         <div className="overflow-y-scroll" style={{maxHeight: '575px'}}> 
                             {/* Lista de categorías */}
                             <ul className="m-0 p-0">
                             {
-                                tags.map(element =>(
+                                tagList.map(element =>(
                                     <li className="px-2 py-1 text-center text-gray-500 capitalize tag-list" key={`tag-li-${element.tag_id}${Math.random()}`}
                                         onClick={checkTag}>
                                             {/* style={{borderBottom: '1px solid #ddd'}} */}
                                         <div className='m-0 p-1'> 
-                                            {element.tag} <input type="checkbox" className='pull-right  tags-cb' style={{color: '#975d2a'}} value={element.tag_id} /> 
+                                            {element.tag} 
+                                            <input type="checkbox" 
+                                                className='pull-right  tags-cb' 
+                                                style={{color: '#975d2a'}} 
+                                                onChange={cbEvent}
+                                                value={element.tag_id} /> 
                                         </div>
                                         <hr className="p-0" style={{width: '200px', margin: '0 auto'}} />
                                     </li>

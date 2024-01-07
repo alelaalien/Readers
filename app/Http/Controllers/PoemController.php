@@ -7,6 +7,7 @@ use Inertia\Inertia;
 use App\Services\TagService;
 use Illuminate\Http\Request;
 use App\Services\PoemService;
+use Illuminate\View\View;
 
 class PoemController extends Controller
 {
@@ -36,6 +37,15 @@ class PoemController extends Controller
         $poems = app(PoemService::class)->showPoemsByTag($request->tag); 
 
         return response()->json(['poems' => $poems]);
+    }
+
+    public function create() 
+    {
+        $tags = app(TagService::class)->tags(); 
+
+        $item = get_class(new Poem());
+
+        return Inertia::render('Create', ['tags' => $tags, 'item' => $item]);
     }
 
     

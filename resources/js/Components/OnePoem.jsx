@@ -14,7 +14,7 @@ export default function OnePoem({poem, onClickFromParent})
 
     useEffect(() =>{
        
-        let result = poem.content.substring(1, 250);
+        let result = poem.content.substring(0, 260);
 
         let val = result.replace(/(\r\n|\n|\r)/gm, "");
       

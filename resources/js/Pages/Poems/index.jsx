@@ -4,6 +4,7 @@ import OnePoem from '@/Components/OnePoem';
 import CategoryNav from '@/Components/CategoryNav';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faHome } from '@fortawesome/free-solid-svg-icons';
+import AddNew from '@/Components/AddNew';
 
 
 export default function PoemIndex({poems, tags, auth})
@@ -14,8 +15,7 @@ export default function PoemIndex({poems, tags, auth})
 
   
     const handleClickFromChild = (tag) => {
-      
-        console.log('Información recibida del hijo:', tag); 
+       
         newList(tag); 
     }
 
@@ -57,8 +57,8 @@ export default function PoemIndex({poems, tags, auth})
                     } 
                     </div> 
                 </div>
-                <div className='col-lg-3'> 
-                <div>soy un div</div>
+                <div className='col-lg-3'>   
+                    <AddNew item="poems" active = {auth.user ? true : false}></AddNew> 
                 </div>
             </div>
         </div> 

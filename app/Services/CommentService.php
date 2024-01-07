@@ -14,8 +14,6 @@ class CommentService {
 
     public function saveComment($data, $content, $userId, $classType)
     {
-        
-        
     
         $validator = Validator::make([
             'content' => $content,
@@ -23,6 +21,7 @@ class CommentService {
         ], Comment::rules());
     
         if ($validator->fails()) {
+           
             throw ValidationException::withMessages($validator->errors()->messages());
             
         }

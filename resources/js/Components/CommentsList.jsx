@@ -3,24 +3,20 @@ import OneComment from "./OneComment";
 
 export default function CommentList({item, auth, comments})
 {
- 
+  
 const element = item;
 const [commentList, setCommentList] = useState(comments); 
+const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
  
 let rand = Math.random();
 const sendComment = async (e) => {
 
-  e.preventDefault(); 
-  let content = document.getElementById('comment-content').value;
-  let itemId = element.id; 
-     
-  fetch('http://127.0.0.1:8000/csrf-token')
-    .then(response => {
-      if (!response.ok) { throw new Error('Network response was not ok');  }
-      return response.json();
-    })
-    .then(data => {
-      const csrfToken = data.csrf_token;
+    e.preventDefault(); 
+    
+    let content = document.getElementById('comment-content').value;
+    
+    let itemId = element.id; 
+      
       const requestOptions = {
         method: 'post',
        
@@ -30,8 +26,7 @@ const sendComment = async (e) => {
             content: content,
             classType: element.class,
             item : itemId }) 
-      }
-
+      } 
 
       fetch('http://127.0.0.1:8000/addComment', requestOptions)
           .then(response => {
@@ -40,7 +35,9 @@ const sendComment = async (e) => {
              
           }).then(response =>{
             
-            if(response ){ document.getElementById('comment-content').value = ''; 
+            if(response ){ 
+              console.log(response);
+              document.getElementById('comment-content').value = ''; 
             setCommentList(response.comments); 
           }
           })
@@ -48,10 +45,8 @@ const sendComment = async (e) => {
               
             console.error('Error al realizar la solicitud:/', error);
           });
-      })
-    .catch(error => {
-      console.error('There was a problem with the fetch operation:', error);
-    }); 
+      
+    
 };
   
   return (

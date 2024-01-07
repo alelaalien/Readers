@@ -26,7 +26,8 @@ Route::middleware('auth')->group(function () {
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 //poems
-  Route::resource('poems', PoemController::class)->only('store', 'update', 'destroy');
+  Route::resource('poems', PoemController::class)->only('store', 'update', 'destroy', 'create');
+ 
 
 //comments 
   Route::post('/addComment', [CommentController::class, 'store'])->name('addComment');
@@ -46,14 +47,6 @@ Route::post('/follow', [UserFollowingController::class, 'addFollow'])->name('fol
 });
 
  
- 
-   
-    
- 
-
-    Route::get('/csrf-token', function() {
-        return response()->json(['csrf_token' => csrf_token()]);
-    });
     
 Route::get('/poem/{id}',  [PoemController::class, 'poem'] )->name('poem');
 Route::get('/poems',  [PoemController::class, 'index'] )->name('showPoems');

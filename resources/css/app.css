@@ -2,6 +2,54 @@
 @tailwind components;
 @tailwind utilities;
 
+ 
+ 
+.ul-tags::-webkit-scrollbar {
+  display: none;
+}
+
+ #tag-modal .modal-content{
+  border-radius: 0 8.65rem;
+  background: linear-gradient(90deg, rgb(145, 125, 101) 0%, rgb(238, 204, 204) 10%, rgb(197, 242, 229) 90%, rgb(145, 125, 101) 100%);
+ 
+  border-top: none;
+ }
+
+ .tags-selector.selected{
+  background: #ffffff8f;
+  border: 1px solid #a29b9b;
+  padding: 2%;
+  max-width: fit-content;
+  margin-bottom: 7%;
+  border-radius: 0.65rem;
+ }
+ .tags-selector.selected:hover{
+  background: #e8d2d0;
+  font-weight: bold; 
+ }
+
+ .ul-tags .tags-selector:hover{
+  background:#c5f2e5; 
+  font-weight: bold;
+ }
+
+ #tag-modal .modal-content .modal-header{
+   border-bottom: none!important;
+ }
+ #tag-modal .modal-content .modal-footer{
+  border-top: none!important;
+}
+ 
+.ul-tags {
+-ms-overflow-style: none;  
+scrollbar-width: none;  
+
+}
+.ul-tags li{
+  background: #ffffff8f;
+ 
+  border: 1px solid #a29b9b;
+}
 .scalable:hover{
   transform: scale(1.5);
 }

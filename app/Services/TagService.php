@@ -2,8 +2,7 @@
 
 namespace App\Services;
 
-use App\Models\Tag;
-use Illuminate\Support\Facades\DB;
+use App\Models\Tag; 
 
 class TagService{
 
@@ -14,5 +13,10 @@ class TagService{
         ->join('poem_tags', 'tags.id', '=', 'poem_tags.tag_id')
         ->orderBy('tags.tag', 'asc')
         ->get(); 
+    }
+
+    public function tags()
+    {
+        return Tag::orderBy('tag', 'asc')->get();
     }
 }

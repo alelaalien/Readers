@@ -63,7 +63,7 @@ function Navbar({auth}) {
 
         <div className={`w-full flex links ${clicked ? 'active' : ''}`}> 
          
-          <a className='self-center float-left' href="">Poems</a>
+          <a className='self-center float-left' href={route('showPoems')}>Poems</a>
           <a className='self-center float-left' href="">Echoes</a>
           <a className='self-center float-left' href="">Books</a> 
           <div className='items-center max-search' > 
@@ -334,7 +334,8 @@ position: absolute;
   background: #ececec;
   border: 1px solid #8a8686;
   right: 6px;
-  top: 45%;
+  top: 113%;
+  z-index: 100;
 `
 const RegisterBox  =styled.div`
 position: absolute; 
@@ -344,5 +345,6 @@ position: absolute;
   background: #ececec;
   border: 1px solid #8a8686;
   right: 0;
-  top: 45%;
+  top: 113%;
+  z-index: 100;
 `
