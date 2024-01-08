@@ -5,8 +5,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 export default function OnePoem({poem, onClickFromParent})
 {    
-    
-    ;
+     
     const viewRelated =(e)=>{
  
          onClickFromParent(e.target.id);   
@@ -24,7 +23,7 @@ export default function OnePoem({poem, onClickFromParent})
   
     return(
             <div className="col-lg-12" style={{background:'white', padding:'2%', marginTop: '15px', borderRadius : '0.65rem',background: 'linear-gradient(90deg, rgb(226, 210, 232) 0%, rgba(249, 237, 64, 0.35) 50%, rgba(68, 31, 12, 0.72) 100%)'}}>                
-            <div className="flex flex-row"
+            <div className="flex flex-row overflow-hidden"
                 style={{background: '#ffffffa8',borderRadius: '1rem', padding: '12px'}}>  
                     <div>
                         <div className="flex" style={{justifyContent: 'space-between'}}>
@@ -33,7 +32,7 @@ export default function OnePoem({poem, onClickFromParent})
                         </div> 
                         <p className="poemContent text-justify mb-0" style={{fontSize: '14px'}} id={`poemContent-${poem.id}`}></p> 
                         <div className="w-full flex" style={{justifyContent: 'space-between'}}>
-                           <a href="" className="w-6/12 inline-flex text-base"><h5 className="text-base "> El autor </h5></a>  
+                            <h5 className="text-base font-bold underline capitalize"> {poem.author} </h5> 
                         </div> 
                     </div>
                 </div>  

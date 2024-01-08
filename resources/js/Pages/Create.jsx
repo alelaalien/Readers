@@ -5,26 +5,32 @@ import Button from 'react-bootstrap/Button';
 import { useState } from "react";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import $ from 'jquery';
-import { faTag } from "@fortawesome/free-solid-svg-icons";
-import { useEffect } from "react";
+import { faTag } from "@fortawesome/free-solid-svg-icons"; 
+import { useForm } from "@inertiajs/react";
+import InputError from "@/Components/InputError";
+import PrimaryButton from "@/Components/PrimaryButton";
+
 
 export default function Create({tags, item, auth})
 {
-    
+ 
     const [show, setShow] = useState(false);
     const [tagList, setTagList] = useState(tags);
     const [selectedList, setSelectedTagList] = useState([]);
+    const [authorInputVisible, setAuthorInputVisible] = useState(true);
     const token = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
-    // console.log(token);
+
     const isRelate =  item === 'App\\Models\\Relate' ? true: false ; 
     
     let itemClass = item.split('\\');
 
-    const iClass = itemClass[2];
+    const iClass = (itemClass[2]).toLowerCase();
     
     const allTags = tags; 
 
+
     const handleClose = () => setShow(false);
+
     const handleShow = () => setShow(true);
  
     const filterTags = (e ) =>{
@@ -106,63 +112,61 @@ export default function Create({tags, item, auth})
 
     }
 
-    // **********************************
+    const {data, setData, post, processing, reset, errors} = useForm({
+        title :'',
+        content : '',
+        tagIds :  [],
+        image: null,
+        isPublic : null,
+        author: ''
+    })
 
-//     const formItem =  () =>{
- 
-//         const formData = new FormData();
+    const tagsId = ()=>{
+    let list = selectedList.map((el) => {  return el.id });
+    return list;
+    }
 
-//         const file = document.querySelector('input[type="file"]');
+    const submit = async  (e) =>{
+     e.preventDefault();
+        const file = document.querySelector('input[type="file"]');
+
+        if(file.files.length > 0) {  data.image = file.files[0];  }
+
+        data.tagIds = tagsId();
+
+        data.isPublic =  $('input[name="privacyContent"]:checked').val();
         
-//         if(file.files.length > 0) {
+       
+      
+        
+        try {
+            const response = await post(route(`${iClass}s.store`));
+            if(response){
+                const data = await response.json();
+            console.log(data);
+            }
+            
+        
+     
+        
+        } catch (error) {
+            console.error(error);
+        }
+            
+            // window.location.href =  `http://127.0.0.1:8000/${iClass}s`;
 
-//             formData.append('file', file.files[0]);
-//         }
+           
+    }
 
-//         formData.append('title', $('#title').val());
-
-//         formData.append('content', $('#content').val());
-
-//        if($('#description'))
-
-//         formData.append('description', $('#title').val());
+    const handleAuthor = (e) =>{
  
-
-//         const tagIds = selectedList.map((el) => {  return el.id })
-         
-//          formData.append('tags', tagIds); 
-
-//          const cb = document.querySelector('input[name="privacyContent"]').value;
-
-//          formData.append('privacy', cb);
-
-//         saveItem(formData);
-
-//     }
-
-//     const saveItem = async (data) => {
-
-//         const url = `http://127.0.0.1/${iClass}s`;
-//         const options = { 
-//             method : 'POST',
-//             headers : {'Content-Type' : 'application/json', 'X-CSRF-TOKEN' : token},
-//             body:JSON.stringify(data)
-//         }
-// // console.log(options)
-//         const response = await fetch(url, options);
-
-//         // const result = await response.json();
-
-//         // console.log(result);
-
-
-//     }
- 
-
+        setAuthorInputVisible(!e.target.checked);
+    }
+  
     return(
 
     <Guest auth={auth}>
-        <form encType="multipart/form-data" method="POST" action={route('poems.store')}>
+        <form  encType="multipart/form-data" onSubmit={submit} >
         <div className="bg-white">
             <div className="container">
                 <div className="row pt-5">
@@ -170,19 +174,25 @@ export default function Create({tags, item, auth})
                     <div className="col-7">
                         <div className="mb-3">
                             <label htmlFor="title" className="form-label">Title</label>
-                            <input type="text" className="form-control" id="title" name="title"/>
+                            <input type="text" 
+                                onChange={e => setData('title', e.target.value)}
+                            className="form-control" id="title" name="title"/>
+                            <InputError message={errors.title}></InputError>
                         </div>
                         {isRelate && ( 
 
                             <div className="mb-3">
                             <label htmlFor="content" className="form-label">Description</label>
-                            <textarea rows="5" className="form-control" id="description" name="description"></textarea>
+                            <textarea 
+                               onChange={e => setData('description', e.target.value)}
+                                rows="5" className="form-control" id="description" name="description" ></textarea>
                             </div>
 
                         )} 
                         <div className="mb-3">
                             <label htmlFor="content" className="form-label">Content</label>
-                            <textarea rows="24" className="form-control" id="content" name="content"></textarea>
+                            <textarea rows="24"  onChange={e => setData('content', e.target.value)}
+                            className="form-control" id="content" name="content" ></textarea>
                         </div>
                     </div>
 
@@ -204,7 +214,7 @@ export default function Create({tags, item, auth})
                         <div className="mb-3">
                             <label htmlFor="image" className="form-label font-bold">Select Image</label>
                             <hr className="mt-0"/>
-                            <input type="file"  accept="image/*" className="form-control" id="image" name="image"/>
+                            <input type="file"  accept="image/*" className="form-control" id="image" name="image" onChange={e => setData('image', e.target.value)}/>
                             <p className="text-muted text-sm  text-justify">*If you choose not to upload an image, a default image will be displayed. You can add your own later.</p>
                         </div>
                     
@@ -213,7 +223,7 @@ export default function Create({tags, item, auth})
                             <label className="form-label font-bold">Privacy</label><br/>
                             <hr className="mt-0"/>
                             <div className="form-check form-check-inline">
-                                <input className="form-check-input" type="radio" name="privacyContent" id="private" defaultChecked value="0"/>
+                                <input className="form-check-input" type="radio" name="privacyContent" id="private" defaultChecked value="0" />
                                 <label className="form-check-label" htmlFor="private">Private</label>
                             </div>
                             <div className="form-check form-check-inline">
@@ -221,13 +231,27 @@ export default function Create({tags, item, auth})
                                 <label className="form-check-label" htmlFor="public">Public</label>
                             </div> 
                             <p className="text-muted text-sm  text-justify">Save your content as a draft by selecting private; others won't be able to view it until you mark it as public.</p>
-                        </div>  
+                        </div> 
+                        {iClass === 'poem' && (
+                        <div className="mb-3">
+                        <label className="form-label font-bold">Privacy</label><br/>
+                            <hr className="mt-0"/>
+                            <label className="form-check-label mr-3" htmlFor="audit">This content is from my audit.</label>
+                            <input type="checkbox"  name="audit" onChange={handleAuthor} />
+                            {
+                                authorInputVisible &&(
+                                    <input type="text" name="author" onChange={e => setData('author', e.target.value)} 
+                                        className="form-control mt-2" placeholder="Author's name"/>
+                                )
+                            }
+                        </div> 
+                        )}
                     </div>
                     <div className="col-12 text-center pb-3">
                         <button type="reset" style={{width:'100px'}} className="btn btn-danger mr-3">Reset</button> 
-                        <button type="submit" style={{width:'100px'}} className="btn btn-success ml-3" 
-                        // onClick={formItem}
-                        >Save</button> 
+                        <PrimaryButton  style={{width:'100px'}} className="btn btn-success ml-3" 
+                        disabled={processing}
+                        >Save</PrimaryButton> 
                     </div>
                 </div>
             </div>

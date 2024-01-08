@@ -51,7 +51,10 @@ class PoemController extends Controller
     
     public function store(Request $request)
     {
-        
+        $response  = app(PoemService::class)->savePoem($request); 
+    
+ 
+        return redirect()->route('poem', ['id' => $response->id]);
     }
  
     public function update(Request $request, Poem $poem)
@@ -64,3 +67,9 @@ class PoemController extends Controller
         
     }
 }
+
+para hacer: se debe ver la imagen del usuario en la vista del poema o la de default si no tiene.
+debo hacer que muestre los errores ( por ejemplo si no son los caracteres minimos necesarios)
+hacer comprobaciones de seguridad necesarios para cada input.
+hacer el scroll c: 
+mover el boton de add new para que sea flotante en pantallas pequeñas.

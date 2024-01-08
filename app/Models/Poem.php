@@ -15,6 +15,8 @@ class Poem extends Model
     use HasFactory;
 
     protected $guarded = [];
+
+    protected $fillable = ['title', 'content'];
  
 
     public function user():BelongsTo
@@ -35,8 +37,12 @@ class Poem extends Model
         return $this->hasManyThrough(Tag::class, PoemTag::class, 'poem_id', 'id', 'id', 'tag_id');
     }
  
-    public static $rules = [
-        'context' => 'required|min:500', 
-        'title' => 'required|min:2'
-    ];
+
+    public static function rules(): array
+    {
+        return [ 
+            'content' => 'required|min:200', 
+            'title' => 'required|min:2'
+        ];
+    }
 }

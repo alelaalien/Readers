@@ -4,8 +4,12 @@ namespace App\Services;
 
 use App\Models\Poem;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Validator; 
 
 class PoemService {
+
+    private $targetDirectory = "/poems/img/"; 
 
     public function showPoems()
     { 
@@ -80,6 +84,72 @@ class PoemService {
             ->with('tags')
             ->get();
         }
+    }
+
+    public function savePoem($data)
+    {
+        
+        $validate = Validator::make([
+            'title' => $data->title, 'content' => $data->content
+        ], Poem::rules());
+
+        if($validate->fails()){
+            
+            return  $validate->errors()->messages();
+        }
+
+        $new = new Poem();
+        $new->title  = $data->title;
+        $new->content  = $data->content;
+        $new->is_public = $data->isPublic;
+        $new->author = $data->author ? $data->author : $data->user()->name;
+        $img = $data->image; 
+ 
+        if($img != null){
+           
+            try {
+
+                 $new->image =  $this->uploadImage($img);
+                 $result =  $data->user()->poems()->save($new);
+                 if($data->tagIds && count($data->tagIds) > 0) { 
+                    app(MainService::class)->poemTags($result->id, $data->tagIds); }
+
+                    return $result;
+            
+                } catch (\Throwable $th) {
+                 
+            }
+        }else{
+            $result =  $data->user()->poems()->save($new);
+            if($data->tagIds && count($data->tagIds) > 0) { 
+                app(MainService::class)->poemTags($result->id, $data->tagIds); }
+                return $result;
+        }
+
+        
+        
+       
+
+        return $result; 
+    }
+
+    private function uploadImage($img)
+    {
+        $name = $this->randomString();
+
+        $fileName = $name.'.' . $img->getClientOriginalExtension();
+ 
+        $storageUrl = $img->storeAs($this->targetDirectory, $fileName);
+ 
+        Storage::url($storageUrl); 
+
+        return $fileName;
+    }
+
+    private function randomString()
+    { 
+        $rand = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
+        return substr(str_shuffle($rand), 0, 8); 
     }
  
 }

@@ -21,4 +21,9 @@ class MainService{
                 break;
         }
     }
+
+    public function poemTags($poem, $dataTag)
+    {
+        app(PoemTagService::class)->savePoemTag($poem, $dataTag);
+    }
 }

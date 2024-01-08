@@ -9,6 +9,10 @@ use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 class PoemTag extends Model
 {
     use HasFactory;
+
+    protected $fillable = ['poem_id', 'tag_id'];
+
+    public $timestamps = false;
     
     public function poems(): BelongsToMany
     {
