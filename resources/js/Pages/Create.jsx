@@ -16,8 +16,12 @@ export default function Create({tags, item, auth})
  
     const [show, setShow] = useState(false);
     const [tagList, setTagList] = useState(tags);
+    const [titleError, setTitleError] = useState('');
+    const [contentError, setContentError] = useState('');
     const [selectedList, setSelectedTagList] = useState([]);
     const [authorInputVisible, setAuthorInputVisible] = useState(true);
+    const bookRegex = /[\w\s\d\p{P}\p{S}–—“”‘’«»¡¿…]/u;
+
     const token = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
 
     const isRelate =  item === 'App\\Models\\Relate' ? true: false ; 
@@ -127,40 +131,76 @@ export default function Create({tags, item, auth})
     }
 
     const submit = async  (e) =>{
-     e.preventDefault();
+
+        e.preventDefault();
+        //control campos vacios  
+        if (!data.title || !data.content)
+        {
+        
+            if (!data.title)   setTitleError('Title is required');
+            if (!data.content)  setContentError( 'Content is required');
+         
+            return; 
+        }else
+        {
+            //largo minimo y regex de titulo
+            if (data.title.length < 2) {
+                setTitleError('Title is too short');
+                return;
+            }else
+            {
+
+                if(!bookRegex.test(data.title)){
+                setTitleError('Some characters are not allowed');
+                return;
+                }
+            }
+            //largo minimo y regex del contenido
+            if( data.content.length < 250){
+
+                setContentError( 'Please, enter content with a minimum of 250 characters');
+                return;
+
+            }else{
+                if(!bookRegex.test(data.content))
+                {
+                    setContentError( 'Some characters are not allowed');
+                    return;
+                }
+            } 
+                    
+        }    
         const file = document.querySelector('input[type="file"]');
 
         if(file.files.length > 0) {  data.image = file.files[0];  }
 
         data.tagIds = tagsId();
 
-        data.isPublic =  $('input[name="privacyContent"]:checked').val();
-        
-       
-      
-        
+        data.isPublic =  $('input[name="privacyContent"]:checked').val(); 
+
         try {
             const response = await post(route(`${iClass}s.store`));
             if(response){
                 const data = await response.json();
-            console.log(data);
-            }
-            
-        
-     
-        
+            // console.log(data);
+            } 
         } catch (error) {
             console.error(error);
         }
-            
-            // window.location.href =  `http://127.0.0.1:8000/${iClass}s`;
-
-           
+          
     }
-
+ 
     const handleAuthor = (e) =>{
  
         setAuthorInputVisible(!e.target.checked);
+    }
+    const handleTitle = () =>{
+ 
+        setTitleError('');
+    }
+    const handleContent = () =>{
+ 
+        setContentError('');
     }
   
     return(
@@ -175,9 +215,14 @@ export default function Create({tags, item, auth})
                         <div className="mb-3">
                             <label htmlFor="title" className="form-label">Title</label>
                             <input type="text" 
+                            onKeyUp={handleTitle}
                                 onChange={e => setData('title', e.target.value)}
-                            className="form-control" id="title" name="title"/>
-                            <InputError message={errors.title}></InputError>
+                            className="form-control " id="title" name="title"/>
+                            {titleError !== ''&&(
+                               
+                                <InputError message={ titleError}></InputError>
+                            )}
+                            
                         </div>
                         {isRelate && ( 
 
@@ -193,6 +238,12 @@ export default function Create({tags, item, auth})
                             <label htmlFor="content" className="form-label">Content</label>
                             <textarea rows="24"  onChange={e => setData('content', e.target.value)}
                             className="form-control" id="content" name="content" ></textarea>
+                            {
+                                contentError !== '' &&(
+                                        <InputError message={contentError}></InputError>
+                                )
+                            }
+                            
                         </div>
                     </div>
 

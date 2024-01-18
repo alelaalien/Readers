@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect }   from 'react'
 import styled from 'styled-components'
 import BurguerButton from '../BurguerButton'
 import { Dropdown } from 'react-bootstrap'; 
@@ -7,15 +7,16 @@ import { useForm } from '@inertiajs/react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faHome, faSearch } from '@fortawesome/free-solid-svg-icons';
 import Register from '../Register';
+import $ from 'jquery'; 
 
 function Navbar({auth}) {
 
   const [clicked, setClicked] = useState(false);
   const [showDropdown, setShowDropdown] = useState(false);
   const [loginBox, setLoginBox] = useState(false);
-  const [registerBox, setRegisterBox] = useState(false);
+  const [registerBox, setRegisterBox] = useState(false); 
   const { post } = useForm({ });
-
+ 
   const handleRegisterBox = () =>{
     setRegisterBox(!registerBox);
   }
@@ -46,9 +47,47 @@ function Navbar({auth}) {
     post(route('logout'));
 };
   
+
+
+// useEffect(() => {
+//   const handleScroll = () => {
+
+//      const vision = $('#vision');  
+//     const scrollPosition = window.scrollY; 
+
+//     const originalHeight = 256; 
+
+//     const originalPadding = 7; 
+    
+//     const newHeight = originalHeight - (scrollPosition * 0.5);
+
+//     const newPadding = originalPadding - (scrollPosition * 0.07);
+    
+   
+//     // console.log(newPadding)
+//     if(newHeight > 50)   { 
+      
+//       vision.css('height', newHeight);
+      
+//       $('#navContainer').css('top', newHeight)
+    
+//     }
+//     if(newPadding > 0)    vision.css('padding', newPadding + '%');
+      
+//   };
+
+//   window.addEventListener('scroll', handleScroll);
+
+//   return () => {
+//     window.removeEventListener('scroll', handleScroll);
+//   };
+// }, []);
+
+
+
   return (
-    <>
-      <NavContainer>
+    <> 
+      <NavContainer >
         <a  className='self-center float-left' onClick={handleClick}> 
           <FontAwesomeIcon icon={faHome}/>
         </a>
@@ -152,7 +191,9 @@ function Navbar({auth}) {
           <BurguerButton clicked={clicked} handleClick={handleClick} />
         </div>
         <BgDiv className={`initial ${clicked ? ' active' : ''}`}></BgDiv>
-      </NavContainer>
+
+        
+      </NavContainer>   
     </>
   )
 }
@@ -160,6 +201,9 @@ function Navbar({auth}) {
 export default Navbar
 
 const NavContainer = styled.nav`
+  
+  left: 0;
+  width: 100%;
   h2{
     color: white;
     font-weight: 400;

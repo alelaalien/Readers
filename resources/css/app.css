@@ -60,6 +60,12 @@ scrollbar-width: none;
   }
 }
 
+.addNew{
+  @media(max-width : 992px) {
+    display: none;
+  }
+}
+
 .cat-handler:hover{
   background:black;
 }
@@ -421,6 +427,7 @@ z-index: 60;
 [x-cloak] {
     display: none;
 }
+ 
 /* Paleta de Colores:*/
  
 .bg-golden{

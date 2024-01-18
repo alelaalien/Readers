@@ -180,7 +180,7 @@ export default function CategoryNav({tags,  onClickFromParent})
 
 const CategoryList = styled.div` 
 
-  @media (max-width: 992px) {
+  @media (max-width: 991px) {
     position: absolute;
   background:#ffffffb5;
   height: 100vh;
@@ -201,7 +201,7 @@ const CategoryList = styled.div`
 `;
 const Exploration = styled.div` 
 
-  @media (max-width: 992px) {
+  @media (max-width: 991px) {
     position: absolute;
     background: #000000b5; 
     z-index: 200; 

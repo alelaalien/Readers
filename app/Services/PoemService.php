@@ -9,7 +9,7 @@ use Illuminate\Support\Facades\Validator;
 
 class PoemService {
 
-    private $targetDirectory = "/poems/img/"; 
+    private $targetDirectory = "public/poems/"; 
 
     public function showPoems()
     { 
@@ -28,6 +28,7 @@ class PoemService {
             ->select(
             'poems.title',
             'poems.author',
+            'poems.image',
             'poems.id',
             'poems.content',
             'users.name',
@@ -126,11 +127,6 @@ class PoemService {
                 return $result;
         }
 
-        
-        
-       
-
-        return $result; 
     }
 
     private function uploadImage($img)

@@ -1,11 +1,10 @@
 import React, { useEffect, useState } from "react";
-import Statics from "./Statistics";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import Statics from "./Statistics"; 
 
 
 export default function OnePoem({poem, onClickFromParent})
-{    
-     
+{       
+ 
     const viewRelated =(e)=>{
  
          onClickFromParent(e.target.id);   

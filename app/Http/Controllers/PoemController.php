@@ -7,7 +7,6 @@ use Inertia\Inertia;
 use App\Services\TagService;
 use Illuminate\Http\Request;
 use App\Services\PoemService;
-use Illuminate\View\View;
 
 class PoemController extends Controller
 {
@@ -28,7 +27,10 @@ class PoemController extends Controller
         $poem = app(PoemService::class)->poem($id); 
         $poem->class= get_class($poem);
         $comments = $poem->comments;
+        $img = $poem->image ? $poem->image : 'default.jpg';
 
+        $poem->img = asset( 'storage/poems/'. $img); 
+      
         return Inertia::render('Poems/poems', ['poem' => $poem, 'comments' => $comments]);
     }
 
@@ -68,8 +70,9 @@ class PoemController extends Controller
     }
 }
 
-para hacer: se debe ver la imagen del usuario en la vista del poema o la de default si no tiene.
-debo hacer que muestre los errores ( por ejemplo si no son los caracteres minimos necesarios)
-hacer comprobaciones de seguridad necesarios para cada input.
-hacer el scroll c: 
-mover el boton de add new para que sea flotante en pantallas pequeñas.
+// debo hacer que muestre los errores ( por ejemplo si no son los caracteres minimos necesarios)
+
+// hacer el scroll c: 
+// mover el boton de add new para que sea flotante en pantallas pequeñas.
+
+ 

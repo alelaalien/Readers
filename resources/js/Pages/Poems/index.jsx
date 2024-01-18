@@ -1,19 +1,17 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect} from 'react';
 import Guest from '@/Layouts/GuestLayout';
 import OnePoem from '@/Components/OnePoem';
-import CategoryNav from '@/Components/CategoryNav';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faHome } from '@fortawesome/free-solid-svg-icons';
-import AddNew from '@/Components/AddNew';
-
+import CategoryNav from '@/Components/CategoryNav'; 
+import AddNew from '@/Components/AddNew'; 
+import styled from 'styled-components';
 
 export default function PoemIndex({poems, tags, auth})
 {   
   
     const [poemsList, setPoemsList] = useState(poems);
     const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content'); 
-
-  
+    
+    
     const handleClickFromChild = (tag) => {
        
         newList(tag); 
@@ -38,16 +36,16 @@ export default function PoemIndex({poems, tags, auth})
     
     return(
         <Guest  auth={auth}> 
-        <div className='container-fluid bg-white'>
-             
-            <div className='row main-row'>
-
-            <div className='col-lg-3 col-sm-12'>
-              
+        <div className='container-fluid bg-white'> 
+            <div className='row main-row'> 
+                <MinBox>
                     <CategoryNav tags={tags}  onClickFromParent={handleClickFromChild}/> 
+                    <AddNew item="poems" active = {auth.user ? true : false}></AddNew>
+                </MinBox>  
+            <div className='col-lg-3 d-lg-block d-md-none'> 
+                <CategoryNav tags={tags}  onClickFromParent={handleClickFromChild}/> 
             </div>
-                <div className='col-lg-6 col-sm-12'>
-                  
+                <div className='col-lg-6 col-md-12'> 
                     <div className="row p-4 bg-white">
                     {
                         poemsList.map(element=> 
@@ -57,8 +55,10 @@ export default function PoemIndex({poems, tags, auth})
                     } 
                     </div> 
                 </div>
-                <div className='col-lg-3'>   
-                    <AddNew item="poems" active = {auth.user ? true : false}></AddNew> 
+                <div className='col-lg-3 col'>
+                    <MaxBox>
+                        <AddNew item="poems" active = {auth.user ? true : false}></AddNew>
+                    </MaxBox>
                 </div>
             </div>
         </div> 
@@ -67,4 +67,19 @@ export default function PoemIndex({poems, tags, auth})
 
 }
 
+const MinBox = styled.div`
+display:none;
+@media(max-width: 991px){
+    display: block;
+    float:right;
+}
 
+`
+const MaxBox = styled.div`
+display:none;
+@media(min-width: 992px){
+    display: block;
+  
+}
+
+`
