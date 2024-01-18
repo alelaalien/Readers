@@ -5,6 +5,7 @@ import Footer from '@/Components/Main/Foot';
 import Vision from '@/Components/Main/Vision';
 import $ from 'jquery';
 import { useEffect } from 'react';
+import TopButton from '@/Components/TopButton';
 
 export default function Guest({ children, auth }) {
 
@@ -24,6 +25,7 @@ export default function Guest({ children, auth }) {
             </div>
         </div>
         <Footer/> 
+        <TopButton/>
         </>
     );
 }
