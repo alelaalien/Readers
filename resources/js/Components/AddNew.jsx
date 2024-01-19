@@ -6,7 +6,7 @@ export default function AddNew({item, active})
 
     return(
         <div style={{width: 'fit-content'}} className="float-right">
-            <div className="text-center p-4 pt-0">
+            <div className="text-center p-4 pt-1">
                 {active ?(
 
                     <a href={route(`${item}.create`)}>

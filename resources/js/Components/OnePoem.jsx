@@ -42,9 +42,8 @@ export default function OnePoem({poem, onClickFromParent})
                 </div>
                 <div className="flex" style={{justifyContent: 'space-between'}}>
                     <Statics></Statics>
-                    <div style={{width: 'fit-content'}}>
-                        <a href={`/poem/${poem.id}`}><button className="btn">View</button></a>
-                        <a href="#"><button className="btn">View Later</button></a>
+                    <div style={{width: 'fit-content', alignContent: 'right', textAlign: 'right'}} className="grid">
+                        <a href={`/poem/${poem.id}`}><button className="btn">View</button></a> 
                     </div>
                 </div>
                 

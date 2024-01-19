@@ -94,7 +94,7 @@ useEffect(() => {
                 <CategoryNav tags={tags}  onClickFromParent={handleClickFromChild}/> 
             </div>
                 <div className='col-lg-6 col-md-12'>   
-                        <div className="row p-4 bg-white">
+                        <div className="row p-4 pt-0 bg-white">
                         {
                             poemsList.map(element=> 
                             ( 
@@ -116,10 +116,11 @@ useEffect(() => {
 }
 
 const MinBox = styled.div`
-display:none;
+display:none; 
 @media(max-width: 991px){
     display: block;
     float:right;
+    height: 40px;
 }`
 const MaxBox = styled.div`
 display:none;
