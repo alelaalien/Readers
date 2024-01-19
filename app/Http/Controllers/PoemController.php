@@ -14,13 +14,23 @@ class PoemController extends Controller
     public function index()
     {   
         
-        $poems = app(PoemService::class)->showPoems(); 
+        $poems = app(PoemService::class)->showPoems(1); 
 
         $tags = app(TagService::class)->tagsAndPoems();
 
-        return Inertia::render('Poems/index', ['poems' => $poems, 'tags' => $tags]);
-   
+        return Inertia::render('Poems/index', ['poems' => $poems, 'tags' => $tags]); 
     }
+
+    public function scroll(Request $request)
+    { 
+        $poems = app(PoemService::class)->showPoems($request->page); 
+
+        $tags = app(TagService::class)->tagsAndPoems();
+
+        return response()->json(['poems' => $poems, 'tags' => $tags]);
+    }
+
+
     public function poem($id)
     {   
         

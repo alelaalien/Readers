@@ -50,6 +50,7 @@ Route::post('/follow', [UserFollowingController::class, 'addFollow'])->name('fol
     
 Route::get('/poem/{id}',  [PoemController::class, 'poem'] )->name('poem');
 Route::get('/poems',  [PoemController::class, 'index'] )->name('showPoems');
+Route::post('/poemsScroll',  [PoemController::class, 'scroll'] )->name('poemsScroll');
 Route::post('/poemsList',  [PoemController::class, 'poemsByTag'] )->name('poemsList');
  
 require __DIR__.'/auth.php';

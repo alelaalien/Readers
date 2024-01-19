@@ -5,10 +5,7 @@ import Statics from "./Statistics";
 export default function OnePoem({poem, onClickFromParent})
 {       
  
-    const viewRelated =(e)=>{
- 
-         onClickFromParent(e.target.id);   
-    }
+    const viewRelated =(e)=>{  onClickFromParent(e.target.id); }
 
     useEffect(() =>{
        
@@ -26,7 +23,7 @@ export default function OnePoem({poem, onClickFromParent})
                 style={{background: '#ffffffa8',borderRadius: '1rem', padding: '12px'}}>  
                     <div>
                         <div className="flex" style={{justifyContent: 'space-between'}}>
-                            <h4 className="w-full text-center text-base font-bold">{poem.title}</h4> 
+                            <h4 className="w-full text-center text-base font-bold">{poem.id}-{poem.title}</h4> 
                             <span className="text-muted">12-12-2012</span>
                         </div> 
                         <p className="poemContent text-justify mb-0" style={{fontSize: '14px'}} id={`poemContent-${poem.id}`}></p> 
@@ -35,17 +32,13 @@ export default function OnePoem({poem, onClickFromParent})
                         </div> 
                     </div>
                 </div>  
-                <div className="text-center" style={{justifyContent: 'space-between'}}>
-               
+                <div className="text-center" style={{justifyContent: 'space-between'}}> 
                         {
                             poem.tags.map(element=> (
                                 <label style={{background: '#5b4e3d', padding: '1%'}} key={`tag-poem-${element.tag_id}${Math.random()}`} className="rounded-lg p-0.5 m-10 mx-15 my-0 ml-2 mt-10 bg-77564e text-white mt-2 cursor-pointer text-base "
                                 onClick={viewRelated} id={element.id}>{element.tag}</label> 
-                            ))
-
-                        }
-                   
-                            
+                            )) 
+                        } 
                 </div>
                 <div className="flex" style={{justifyContent: 'space-between'}}>
                     <Statics></Statics>

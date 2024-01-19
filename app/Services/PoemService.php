@@ -11,14 +11,13 @@ class PoemService {
 
     private $targetDirectory = "public/poems/"; 
 
-    public function showPoems()
-    { 
-
+    public function showPoems($page)
+    {  
         return Poem::select('poems.*', 'users.name', 'users.id as user_id', 'users.profile_photo_path as user_pic')
         ->leftJoin('users', 'users.id', '=', 'poems.user_id')
         ->where('poems.is_public', 1)
         ->with('tags')
-        ->get();
+        ->paginate(6, $page); 
         
     }
   

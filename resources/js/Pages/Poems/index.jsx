@@ -6,24 +6,23 @@ import AddNew from '@/Components/AddNew';
 import styled from 'styled-components';
 
 export default function PoemIndex({poems, tags, auth})
-{   
-  
-    const [poemsList, setPoemsList] = useState(poems);
+ {
+ 
+    const [poemsList, setPoemsList] = useState(poems.data); 
+    const [page, setPage] = useState(2); 
+    const [loading, setLoading] = useState(false);
+    
     const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content'); 
-    
-    
-    const handleClickFromChild = (tag) => {
-       
-        newList(tag); 
-    }
+    const headerOptions =  {
+            'Content-Type' : 'application/json',
+            'X-CSRF-TOKEN' : csrfToken 
+        }
+    const handleClickFromChild = (tag) => { newList(tag); }
 
     const newList = async (tag) =>{
 
         const options = {
-            headers:{
-                'Content-Type' : 'application/json',
-                'X-CSRF-TOKEN' : csrfToken 
-            },
+            headers: headerOptions,
             method : 'POST',
             body: JSON.stringify({'tag' : tag}) 
         }
@@ -33,7 +32,56 @@ export default function PoemIndex({poems, tags, auth})
        
         setPoemsList(result.poems); 
     }
+
+//********************************** */ carga dinamica de datos *******************
+
+useEffect(() => {
+
+    const handleScroll = () => { 
+      if (
+        window.innerHeight + document.documentElement.scrollTop ===
+        document.documentElement.offsetHeight
+      ) {
+        
+        fetchData();  
+      }
+    };
+
+    const fetchData = async () => {
     
+      if (loading) return;
+      setLoading(true);
+
+      try {
+        const options = {
+            headers: headerOptions,
+            method : 'POST',
+            body: JSON.stringify({'page' : page}) 
+        }
+  
+        if(page <= poems.last_page) {
+            
+            const request = await fetch(`http://127.0.0.1:8000/poemsScroll`, options); 
+            const result = await request.json(); 
+            setPage(page+1); 
+            const poemPrevList = poemsList; 
+            let newList = poemPrevList.concat(result.poems.data); 
+            setPoemsList(newList);
+        }
+      } catch (error) {
+        console.error("Error fetching data:/", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    window.addEventListener("scroll", handleScroll);
+    return () => {
+      window.removeEventListener("scroll", handleScroll);
+    };
+  }, [page, loading]);
+//******************************************************************************** */
+ 
     return(
         <Guest  auth={auth}> 
         <div className='container-fluid bg-white'> 
@@ -45,15 +93,15 @@ export default function PoemIndex({poems, tags, auth})
             <div className='col-lg-3 d-lg-block d-md-none'> 
                 <CategoryNav tags={tags}  onClickFromParent={handleClickFromChild}/> 
             </div>
-                <div className='col-lg-6 col-md-12'> 
-                    <div className="row p-4 bg-white">
-                    {
-                        poemsList.map(element=> 
-                           ( 
-                           <OnePoem key={`one-poem-${element.id}`} poem={element}  onClickFromParent={handleClickFromChild}/>)
-                           ) 
-                    } 
-                    </div> 
+                <div className='col-lg-6 col-md-12'>   
+                        <div className="row p-4 bg-white">
+                        {
+                            poemsList.map(element=> 
+                            ( 
+                            <OnePoem key={`one-poem-${element.id}`} poem={element}  onClickFromParent={handleClickFromChild}/>)
+                            ) 
+                        } 
+                        </div> 
                 </div>
                 <div className='col-lg-3 col'>
                     <MaxBox>
@@ -72,14 +120,9 @@ display:none;
 @media(max-width: 991px){
     display: block;
     float:right;
-}
-
-`
+}`
 const MaxBox = styled.div`
 display:none;
 @media(min-width: 992px){
     display: block;
-  
-}
-
-`
+}`
