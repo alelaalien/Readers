@@ -1,13 +1,13 @@
 import React, { useState, useEffect} from 'react';
 import Guest from '@/Layouts/GuestLayout';
-import OneThought from '@/Components/Onethought';
+// import OneThought from '@/Components/Onethought';
 import CategoryNav from '@/Components/CategoryNav'; 
 import AddNew from '@/Components/AddNew'; 
 import styled from 'styled-components';
 
 export default function EchoIndex({thoughts, tags, auth})
  {
- 
+ console.log(thoughts);
     const [thoughtsList, setthoughtsList] = useState(thoughts.data); 
     const [page, setPage] = useState(2); 
     const [loading, setLoading] = useState(false);
@@ -96,10 +96,10 @@ useEffect(() => {
                 <div className='col-lg-6 col-md-12'>   
                         <div className="row p-4 pt-0 bg-white">
                         {
-                            thoughtsList.map(element=> 
-                            ( 
-                            <Onethought key={`one-thought-${element.id}`} thought={element}  onClickFromParent={handleClickFromChild}/>)
-                            ) 
+                            // thoughtsList.map(element=> 
+                            // ( 
+                            // <Onethought key={`one-thought-${element.id}`} thought={element}  onClickFromParent={handleClickFromChild}/>)
+                            // ) 
                         } 
                         </div> 
                 </div>

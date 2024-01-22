@@ -9,37 +9,36 @@ use Illuminate\Support\Facades\Validator;
 
 class ThoughtService {
     
-    private $targetDirectory = "public/poems/";
+    private $targetDirectory = "public/thoughts/";
     
     public function getThoughtByUser($id) {
 
          return Thought::where('user_id', $id);
     }
       
-    public function showPoems($page)
+    public function showThoughts($page)
     {  
-        return Thought::select('poems.*', 'users.name', 'users.id as user_id', 'users.profile_photo_path as user_pic')
-        ->leftJoin('users', 'users.id', '=', 'poems.user_id')
-        ->where('poems.is_public', 1)
+        return Thought::select('thoughts.*', 'users.name', 'users.id as user_id', 'users.profile_photo_path as user_pic')
+        ->leftJoin('users', 'users.id', '=', 'thoughts.user_id')
+        ->where('thoughts.is_public', 1)
         ->with('tags')
         ->paginate(6, $page); 
         
     }
   
-    public function poem($id)
+    public function thought($id)
     {    
-            return Thought::where('poems.id', $id)
+            return Thought::where('thoughts.id', $id)
             ->select(
-            'poems.title',
-            'poems.author',
-            'poems.image',
-            'poems.id',
-            'poems.content',
+            'thoughts.title', 
+            'thoughts.image',
+            'thoughts.id',
+            'thoughts.content',
             'users.name',
             'users.id as user_id',
             DB::raw('CASE WHEN users.email_verified_at IS NOT NULL THEN TRUE ELSE FALSE END AS verificated'),
-            DB::raw('(SELECT COUNT(*) FROM poems p WHERE p.user_id = users.id) AS poems_count'),
-            DB::raw('(SELECT GROUP_CONCAT(p.id) FROM (SELECT ' . $id . ' as id UNION SELECT id FROM poems WHERE user_id = users.id AND id != ' . $id . ') p) AS poems_ids')
+            DB::raw('(SELECT COUNT(*) FROM thoughts p WHERE p.user_id = users.id) AS thoughts_count'),
+            DB::raw('(SELECT GROUP_CONCAT(p.id) FROM (SELECT ' . $id . ' as id UNION SELECT id FROM thoughts WHERE user_id = users.id AND id != ' . $id . ') p) AS thoughts_ids')
             )
             ->with([
             'comments' => function ($query) {
@@ -56,7 +55,7 @@ class ThoughtService {
                     ]);
             }
             ])
-            ->leftJoin('users', 'poems.user_id', '=', 'users.id')
+            ->leftJoin('users', 'thoughts.user_id', '=', 'users.id')
             ->first();
       
     }
@@ -66,32 +65,32 @@ class ThoughtService {
        return Thought::where('user_id', $user_id)->pluck('id');
     }
 
-    public function showPoemsByTag($tag)
+    public function showThoughtsByTag($tag)
     {
         if(is_array($tag))
         {
-           return Thought::leftJoin('poem_tags', 'poems.id', '=', 'poem_tags.poem_id')
-            ->whereIn('poem_tags.tag_id', $tag)
-            ->groupBy('poems.id')
-            ->havingRaw('COUNT(DISTINCT poem_tags.tag_id) <= 2')
-            ->select('poems.*')
-            ->where('poems.is_public', 1)
+           return Thought::leftJoin('thoughts_tags', 'thoughts.id', '=', 'thoughts_tags.Thought_id')
+            ->whereIn('thoughts_tags.tag_id', $tag)
+            ->groupBy('thoughts.id')
+            ->havingRaw('COUNT(DISTINCT thoughts_tags.tag_id) <= 2')
+            ->select('thoughts.*')
+            ->where('thoughts.is_public', 1)
             ->with('tags')
             ->get();
 
         }else
         {
-            return Thought::leftJoin('poem_tags', 'poems.id', '=', 'poem_tags.poem_id') 
-            ->groupBy('poems.id') 
-            ->select('poems.*')
-            ->where('poems.is_public', 1)
-            ->where('poem_tags.tag_id', $tag)
+            return Thought::leftJoin('thoughts_tags', 'thoughts.id', '=', 'thoughts_tags.Thought_id') 
+            ->groupBy('thoughts.id') 
+            ->select('thoughts.*')
+            ->where('thoughts.is_public', 1)
+            ->where('thoughts_tags.tag_id', $tag)
             ->with('tags')
             ->get();
         }
     }
 
-    public function savePoem($data)
+    public function saveThought($data)
     {
         
         $validate = Validator::make([
@@ -107,7 +106,6 @@ class ThoughtService {
         $new->title  = $data->title;
         $new->content  = $data->content;
         $new->is_public = $data->isPublic;
-        $new->author = $data->author ? $data->author : $data->user()->name;
         $img = $data->image; 
  
         if($img != null){
@@ -115,9 +113,9 @@ class ThoughtService {
             try {
 
                  $new->image =  $this->uploadImage($img);
-                 $result =  $data->user()->poems()->save($new);
+                 $result =  $data->user()->thoughts()->save($new);
                  if($data->tagIds && count($data->tagIds) > 0) { 
-                    app(MainService::class)->poemTags($result->id, $data->tagIds); }
+                    app(MainService::class)->ThoughtTags($result->id, $data->tagIds); }
 
                     return $result;
             
@@ -125,9 +123,9 @@ class ThoughtService {
                  
             }
         }else{
-            $result =  $data->user()->poems()->save($new);
+            $result =  $data->user()->thoughts()->save($new);
             if($data->tagIds && count($data->tagIds) > 0) { 
-                app(MainService::class)->poemTags($result->id, $data->tagIds); }
+                app(MainService::class)->ThoughtTags($result->id, $data->tagIds); }
                 return $result;
         }
 

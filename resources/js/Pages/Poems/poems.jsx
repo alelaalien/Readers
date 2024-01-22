@@ -4,8 +4,7 @@ import ReactionBar from '@/Components/ReactionBar';
 import CommentList from '@/Components/CommentsList';
   
 export default function poems({ auth, poem , comments}) {
-  
-     
+  console.log(poem); 
     const divStyle = {
        height: '500px' 
       };

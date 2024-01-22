@@ -63,7 +63,7 @@ class User extends Authenticatable
         return $this->hasMany(Message::class);
     }
 
-    public function user_details():HasOne
+    public function details():HasOne
     {
         return $this->hasOne(UserDetail::class);
     }

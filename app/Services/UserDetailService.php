@@ -10,7 +10,18 @@ class UserDetailService {
 
     public function getDetailByUser($id) {
 
-         return UserDetail::where('user_id', $id)->first();
+        try {
+            
+            return UserDetail::where('user_id', $id)->first();
+          
+
+        } catch (\Throwable $th) {
+            
+              return "Error Processing Request: " . $th->getMessage();
+            
+        }
+
+         
     }
 
     public function getFieldByUser($id, $field) 

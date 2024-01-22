@@ -11,8 +11,7 @@ use App\Services\ThoughtService;
 class ThoughtController extends Controller
 { 
     public function index()
-    {   
-        
+    {    
         $thoughts = app(ThoughtService::class)->showThoughts(1); 
 
         $tags = app(TagService::class)->tagsAndthoughts();
@@ -40,7 +39,7 @@ class ThoughtController extends Controller
 
         $thought->img = asset( 'storage/thoughts/'. $img); 
       
-        return Inertia::render('thoughts/thoughts', ['thought' => $thought, 'comments' => $comments]);
+        return Inertia::render('Echoes/echoes', ['thought' => $thought, 'comments' => $comments]);
     }
 
     public function thoughtsByTag(Request $request)
@@ -65,7 +64,7 @@ class ThoughtController extends Controller
         $response  = app(ThoughtService::class)->savethought($request); 
     
  
-        return redirect()->route('thought', ['id' => $response->id]);
+        return redirect()->route('echo', ['id' => $response->id]);
     }
  
     public function update(Request $request, thought $thought)

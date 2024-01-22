@@ -47,6 +47,11 @@ function Navbar({auth}) {
     post(route('logout'));
 };
   
+const redirect = (url) =>{
+
+  window.location.href = url;
+
+}
 
 
 // useEffect(() => {
@@ -88,7 +93,9 @@ function Navbar({auth}) {
   return (
     <> 
       <NavContainer >
-        <a  className='self-center float-left' onClick={handleClick}> 
+        <a  className='self-center float-left'// onClick={handleClick}
+           href='/'
+        > 
           <FontAwesomeIcon icon={faHome}/>
         </a>
         <div className='items-center mini-search w-full' > 
@@ -103,7 +110,7 @@ function Navbar({auth}) {
         <div className={`w-full flex links ${clicked ? 'active' : ''}`}> 
          
           <a className='self-center float-left' href={route('showPoems')}>Poems</a>
-          <a className='self-center float-left' href="">Echoes</a>
+          <a className='self-center float-left' href={route('showThoughts')}>Echoes</a>
           <a className='self-center float-left' href="">Books</a> 
           <div className='items-center max-search' > 
             <form action="" className='float-left self-center mr-4 m-auto w-full' style={{display:'flex'}}>
@@ -117,12 +124,12 @@ function Navbar({auth}) {
           {auth.user ? (
             <>
             <MiniBar>
-              <a href={route('dashboard')} className="min-bar self-center float-right nav-link font-semibold text-gray-600 hover:text-gray-900 dark:text-gray-400 dark:hover:text-white focus:outline focus:outline-2 focus:rounded-sm focus:outline-red-500">
+              {/* <a href={route('dashboard')} className="min-bar self-center float-right nav-link font-semibold text-gray-600 hover:text-gray-900 dark:text-gray-400 dark:hover:text-white focus:outline focus:outline-2 focus:rounded-sm focus:outline-red-500">
                   My profile
               </a>
               <a href={route('dashboard')} className="min-bar self-center float-right nav-link font-semibold text-gray-600 hover:text-gray-900 dark:text-gray-400 dark:hover:text-white focus:outline focus:outline-2 focus:rounded-sm focus:outline-red-500">
                   Settings
-              </a>
+              </a> */}
               <a onClick={submit}  className="cursor-pointer min-bar self-center float-right nav-link font-semibold text-gray-600 hover:text-gray-900 dark:text-gray-400 dark:hover:text-white focus:outline focus:outline-2 focus:rounded-sm focus:outline-red-500">
                   Log out
               </a>
@@ -136,10 +143,11 @@ function Navbar({auth}) {
                   <Menu>
                   <Dropdown.Menu>
                           <Dropdown.Item  >
-                            <div className='flex'>
+                            {/* <div className='flex' onClick={redirect('/dashboard')}>
+                              
                               <h4 className="m-auto">My Profile</h4> 
                               <img src="../img/assets/user.png" alt="user" />
-                            </div>
+                            </div> */}
                           </Dropdown.Item>   
                           <Dropdown.Item  >
                             <div className='flex'>
