@@ -39,6 +39,7 @@ class UserDetailService {
  
     public function saveData($data, $field)
     {
+        
         $userId = auth()->user()->id; 
 
         $userDetail = UserDetail::where('user_id', $userId)->first();

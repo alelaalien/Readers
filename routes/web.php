@@ -43,6 +43,11 @@ Route::middleware('auth')->group(function () {
 
     //reactions
     Route::post('/follow', [UserFollowingController::class, 'addFollow'])->name('follow');
+
+    //user details
+    Route::post('/saveDescription',  [UserController::class, 'updateDetails'] )->name('saveDescription');
+
+    
 });
 
  
