@@ -45,6 +45,7 @@ Route::middleware('auth')->group(function () {
     Route::post('/follow', [UserFollowingController::class, 'addFollow'])->name('follow');
 
     //user details
+    Route::post('/savePic',  [UserController::class, 'updateProfilePhotoPath'] )->name('savePic');
     Route::post('/saveDescription',  [UserController::class, 'updateDetails'] )->name('saveDescription');
 
     

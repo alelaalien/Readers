@@ -4,8 +4,12 @@ namespace App\Services;
 
 use DB;
 use App\Models\User;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Storage;
 
 class UserService {
+ 
+
     public function getUserInfo($id) {
         
         try {
@@ -31,5 +35,26 @@ class UserService {
             return false;
         }
     }
+
+    public function updateProfilePic($data)
+    {
+        try {
+            $user = User::find(Auth::id());
+
+            $prevImg = $user->profile_photo_path;
+
+            $user->profile_photo_path = $data;
+
+            $user->save();
+            
+            return $prevImg;
+
+        } catch (\Throwable $th) {
+
+            throw $th;
+        }
+    }
+
+
  
 }
