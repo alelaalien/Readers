@@ -1,6 +1,16 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+.blue{
+  color: #072a48!important;
+}
+.bottom-blue{
+  border-bottom: 1px solid #397cb7!important;
+}
+.modal-rev{
+  margin-top: -15%!important;
+}
 .fit{
    height: fit-content!important;
 }

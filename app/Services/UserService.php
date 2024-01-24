@@ -16,6 +16,7 @@ class UserService {
             return User::leftJoin('user_details as d', 'd.user_id', '=', 'users.id')
             ->select([
                 'users.id',
+                'users.name',
                 'users.profile_photo_path as pic',
                 'users.email_verified_at',
                 'd.title',
