@@ -46,12 +46,11 @@ Route::middleware('auth')->group(function () {
 
     //user details
     Route::post('/savePic',  [UserController::class, 'updateProfilePhotoPath'] )->name('savePic');
+    Route::post('/newMedias',  [UserController::class, 'newMedias'] )->name('newMedias');
     Route::post('/saveDescription',  [UserController::class, 'updateDetails'] )->name('saveDescription');
 
     
 });
-
- 
     
 Route::get('/poem/{id}',  [PoemController::class, 'poem'] )->name('poem');
 Route::get('/poems',  [PoemController::class, 'index'] )->name('showPoems');

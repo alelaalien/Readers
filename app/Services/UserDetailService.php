@@ -3,11 +3,13 @@
 namespace App\Services;
 
 use App\Models\UserDetail;
+use ErrorException;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Validator;
 
 class UserDetailService {
-
+  
     public function getDetailByUser($id) {
 
         try {
@@ -93,6 +95,33 @@ class UserDetailService {
         Session::flash('message', 'Success!');
         
         return $newPublics;
+    }
+
+    public function newMedias($dataObject)
+    {   
+        $userId = auth()->user()->id; 
+
+        $user = UserDetail::where('user_id', $userId)->first(); 
+
+        if(!$user){  return response()->json(['error' => 'User not found']); }
+
+        $keys = array_keys($dataObject->all());
+       
+        foreach ($keys as $key) {
+
+            $user->{$key} = $dataObject->{$key};
+        }
+        
+        try {
+
+            $user->save(); 
+
+            return response()->json(['success' => 'Done!'], 200);
+
+        } catch (\Throwable $th) {
+            
+            return response()->json(['error' => 'Try again later or contact the Support Team.']);
+        } 
     }
  
 }

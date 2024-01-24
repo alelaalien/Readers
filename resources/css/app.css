@@ -4,6 +4,15 @@
 .fit{
    height: fit-content!important;
 }
+.btn-edit-profile{
+  background: #68480e!important;
+  border: 1px solid brown!important;
+}
+.editor-shadow:hover{
+  -webkit-box-shadow: -1px 0px 38px -7px rgba(242,208,97,1);
+  -moz-box-shadow: -1px 0px 38px -7px rgba(242,208,97,1);
+  box-shadow: -1px 0px 38px -7px rgba(242,208,97,1);
+}
 @media (min-width: 992px) { 
   #side-col {
     width: 40%;  
