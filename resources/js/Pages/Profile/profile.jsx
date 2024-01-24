@@ -1,5 +1,5 @@
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faBars, faFileInvoice, faHeart, faList, faMessage, faPen, faPodcast, faRocket, faSearch, faUser } from '@fortawesome/free-solid-svg-icons';
+import { faAnchor, faAt, faBars, faFileInvoice, faHeart, faList, faMessage, faPen, faPodcast, faRocket, faSearch, faUser } from '@fortawesome/free-solid-svg-icons';
 import { faFacebook, faTwitter, faInstagram, faLinkedin, faYoutube } from '@fortawesome/free-brands-svg-icons';
 import styled from 'styled-components';
 import { useState } from 'react';
@@ -11,7 +11,7 @@ import Swal from 'sweetalert2';
 export default function Profile({ auth, user, url }) {
  
     const userData = user ? user[0] : null;
-  
+  console.log(userData);
     const titles = [{title:"Revelations of self", icon: faUser, url : "revelations_of_self", 
                         content: 'This public space serves as your introduction to those visiting your profile, allowing them to get to know you better.',
                         revelation : 'Feel free to share a more detailed introduction about yourself here'},
@@ -99,9 +99,9 @@ export default function Profile({ auth, user, url }) {
     const saveRevelation = (event) =>{
 
         let item = 'revelations_of_self' ;
-
+     
         let itemValue = $('#edit-' + item).val();
-
+ 
         saveData(event, item, itemValue);
 
         setEditRevelation(false);
@@ -163,7 +163,7 @@ export default function Profile({ auth, user, url }) {
 
             switch (item) {
                 case 'description': setCurrentDescription(value);  break;
-                case 'revelations_of_self': setCurrentRevelation(value);  break; 
+                case 'revelations_of_self': setCurrentRevelation(value); handleClose(); break; 
                 default: break;
             } 
         }else{  console.error(response); }  
@@ -182,7 +182,7 @@ export default function Profile({ auth, user, url }) {
           },
         }).then((result) => {
           if (result.isConfirmed) {
-
+ 
             setEditRevelation(false);
             handleClose();
              
@@ -276,7 +276,7 @@ export default function Profile({ auth, user, url }) {
                                             </li> 
                                         )) 
                                     } 
-                                    {auth.user && auth.user.id === userData.id &&(
+                                     {auth.user && auth.user.id === userData.id &&(
                                         <li className='text-center'><button className='btn btn-danger'>Log out</button></li>
                                     )}
                                 </ul>
@@ -307,10 +307,10 @@ export default function Profile({ auth, user, url }) {
                                             
                                             <>
                                                 <h2 className='bottom-blue blue pt-4 w-9/12'>{titles[0].title}</h2>
-                                                <button className='btn btn-primary self-center fit'  onClick={handleEditing}>Edit</button>
+                                                <button className='btn btn-primary self-center fit'  onClick={handleEditing}>Open editor</button>
                                             </>
                                         )
-                                            
+
                                     ):(
                                         <h2 className='blue bottom-blue'>{titles[0].title}</h2>
                                     ) 
@@ -363,7 +363,7 @@ export default function Profile({ auth, user, url }) {
                                         isEditing ? (
                                             editRevelation ?(
                                                 <>
-                                                    <textarea className='form-control' id='edit-revelations_of_self' defaultValue={currentRevelation} rows="10"></textarea>
+                                                    <textarea className='form-control' id='' defaultValue={currentRevelation} rows="10"></textarea>
                                                     <div className='d-flex justify-between'>   
                                                         <button className='btn btn-danger  self-center fit'  onClick={handleShow}>Cancel</button>
                                                         <button className='btn btn-success   self-center fit' onClick={saveRevelation}>Save</button>
@@ -391,21 +391,26 @@ export default function Profile({ auth, user, url }) {
                             {isEditing &&(
                                 <div className='row  m-auto'> 
                                         <div className='col-12'> 
-                                            <div className='d-flex justify-between'>
-                                                <h5 className='w-full text-center'>Personal info & social medias</h5>
+                                            {/* <div className='d-flex justify-between'> */}
+                                                <h5 className='w-full text-center'>Social medias</h5>
                                                 {editMedias ? (
-                                                    <>
+                                                    <div className='text-right'>
                                                         <button className='btn btn-danger' onClick={handleMedias}>Cancel</button>
                                                         <button className='btn btn-primary' onClick={saveMedias}>Save</button>
-                                                    </>
+                                                    </div>
                                                 ):(
-                                                    <button className='btn btn-primary' onClick={handleMedias}>Edit</button>
+                                                    <button className='btn btn-primary pull-right' 
+                                                        onClick={handleMedias} style={{marginTop: '-3%', float: 'right'}}
+                                                        onMouseOver={handleMouseOver}
+                                                        onMouseOut={handleMouseOut}>
+                                                        Edit
+                                                    </button>
                                                 )}
                                                 
-                                            </div> 
+                                            {/* </div>  */}
                                             <div className='row'> 
-                                            <div className='col-6'>
-                                                <div className='form-group'>
+                                            {/* <div className='col-6'>
+                                                <div className='form-group pb-3'>
                                                     <label className='capitalize'>
                                                         <FontAwesomeIcon icon={faUser} className="icon mr-2"/>
                                                         Name:</label>
@@ -420,8 +425,60 @@ export default function Profile({ auth, user, url }) {
 
                                                     
                                                 </div>
-                                            </div>
-                                            <div className='col-6'> 
+                                                <div className='form-group  pb-3'>
+                                                    <label className='capitalize'>
+                                                        <FontAwesomeIcon icon={faAt} className="icon mr-2"/>
+                                                        Email:</label>
+                                                        
+                                                        {editMedias ? (
+                                                             <>  
+                                                                <input type="text" className="form-control personal-editor" defaultValue={userData.email}  name="name" />
+                                                                <p className='text-muted text-xs'>You will be sent a link to verify your new email address.</p>
+                                                             </>
+                                                        ):
+                                                        (
+                                                            <h6 className='text-muted pl-2 lowercase'>{userData.email}</h6>
+                                                        )}
+
+                                                    
+                                                </div> */}
+                                                {/* <div className='form-group'>
+                                                    <label className='capitalize'>
+                                                        <FontAwesomeIcon icon={faUser} className="icon mr-2"/>
+                                                        Name:</label>
+                                                        
+                                                        {editMedias ? (
+                                                             
+                                                             <input type="text" className="form-control personal-editor" defaultValue={userData.name}  name="name" />
+                                                        ):
+                                                        (
+                                                            <h6 className='text-muted pl-2 capitalize'>{userData.name}</h6>
+                                                        )}
+
+                                                    
+                                                </div> */}
+                                                {/* <div className='form-group'>
+                                                    <label className='capitalize'>
+                                                        <FontAwesomeIcon icon={faUser} className="icon mr-2"/>
+                                                        Name:</label>
+                                                        
+                                                        {editMedias ? (
+                                                             
+                                                             <input type="text" className="form-control personal-editor" defaultValue={userData.name}  name="name" />
+                                                        ):
+                                                        (
+                                                            <h6 className='text-muted pl-2 capitalize'>{userData.name}</h6>
+                                                        )}
+
+                                                    
+                                                </div> */}
+                                                {/* <div> 
+                                                    <button className='btn btn-secondary'> Request password
+                                                    </button>
+                                                    <p className='text-muted text-xs'>You will be sent a link to your email address for the reset of your password.</p>
+                                                </div>
+                                            </div> */}
+                                            <div className='col-10 m-auto'> 
                                             
                                                 {
                                                    Object.keys(socialMedias).map((element, index) =>( 
@@ -498,7 +555,7 @@ export default function Profile({ auth, user, url }) {
           <Modal.Title>Modal de Ejemplo</Modal.Title>
         </Modal.Header>
         <Modal.Body>
-           <textarea name="edit-revelation" id="" cols="30" rows="10" 
+           <textarea id="edit-revelations_of_self"   cols="30" rows="10" 
            defaultValue={currentRevelation}
            className='form-control'></textarea>
         </Modal.Body>
@@ -506,7 +563,7 @@ export default function Profile({ auth, user, url }) {
           <Button variant="secondary" onClick={showConfirmationModal}>
             Cancel
           </Button>
-          <Button variant="primary" onClick={handleClose}>
+          <Button variant="primary" onClick={saveRevelation}>
             Save changes
           </Button>
         </Modal.Footer>

@@ -17,6 +17,7 @@ class UserService {
             ->select([
                 'users.id',
                 'users.name',
+                'users.email',
                 'users.profile_photo_path as pic',
                 'users.email_verified_at',
                 'd.title',

@@ -31,7 +31,7 @@ class UserController extends Controller
 
     public function updateDetails(Request $request)
     { 
-        $item = $request->keys();
+        $item = $request->keys(); 
         
         return app(UserDetailService::class)->saveData($request->{$item[0]}, $item[0]); 
     }
