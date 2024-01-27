@@ -9,7 +9,7 @@ import { faHome, faSearch } from '@fortawesome/free-solid-svg-icons';
 import Register from '../Register';
 import $ from 'jquery'; 
 
-function Navbar({auth}) {
+function Navbar({auth, margin}) {
 
   const [clicked, setClicked] = useState(false);
   const [showDropdown, setShowDropdown] = useState(false);
@@ -52,47 +52,27 @@ const redirect = (url) =>{
   window.location.href = url;
 
 }
+const [scrollHeight, setScrollHeight] = useState(margin);
 
+useEffect(() => {
+  const handleScroll = () => {
+    const scrollPos = window.scrollY;
+    const newHeight = Math.max(100, 256 - scrollPos);
 
-// useEffect(() => {
-//   const handleScroll = () => {
+    setScrollHeight(newHeight);
+  };
 
-//      const vision = $('#vision');  
-//     const scrollPosition = window.scrollY; 
+  window.addEventListener('scroll', handleScroll);
 
-//     const originalHeight = 256; 
-
-//     const originalPadding = 7; 
-    
-//     const newHeight = originalHeight - (scrollPosition * 0.5);
-
-//     const newPadding = originalPadding - (scrollPosition * 0.07);
-    
-   
-//     // console.log(newPadding)
-//     if(newHeight > 50)   { 
-      
-//       vision.css('height', newHeight);
-      
-//       $('#navContainer').css('top', newHeight)
-    
-//     }
-//     if(newPadding > 0)    vision.css('padding', newPadding + '%');
-      
-//   };
-
-//   window.addEventListener('scroll', handleScroll);
-
-//   return () => {
-//     window.removeEventListener('scroll', handleScroll);
-//   };
-// }, []);
-
-
+  return () => {
+    window.removeEventListener('scroll', handleScroll);
+  };
+}, []);
 
   return (
     <> 
-      <NavContainer >
+      <NavContainer   >
+        
         <a  className='self-center float-left'// onClick={handleClick}
            href='/'
         > 

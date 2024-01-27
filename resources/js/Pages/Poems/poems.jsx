@@ -2,9 +2,10 @@ import { Head } from '@inertiajs/react';
 import Guest from '@/Layouts/GuestLayout';
 import ReactionBar from '@/Components/ReactionBar';
 import CommentList from '@/Components/CommentsList';
+import { Parallax } from 'react-parallax';
   
 export default function poems({ auth, poem , comments}) {
-  console.log(poem); 
+
     const divStyle = {
        height: '500px' 
       };
@@ -20,6 +21,11 @@ export default function poems({ auth, poem , comments}) {
                         </div>
                     {/* data */}
                     <hr/>
+                    <Parallax blur={0} bgImage={`${poem.img}`} bgImageAlt="the cat" strength={500}>
+       <div>
+        <h1>Content goes here. Parallax height grows with content height.</h1>
+        </div> 
+    </Parallax>
                     <h1 className="font-bold text-2xl p-4">{ poem.title }</h1>
                     <p className="whitespace-pre-line">{ poem.content }</p> 
                     <ReactionBar poem={poem}  auth={auth}></ReactionBar> 

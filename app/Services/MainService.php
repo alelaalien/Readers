@@ -3,7 +3,9 @@
 namespace App\Services;
 
 use App\Models\Poem;
+use App\Models\Thought;
 use App\Models\ThoughtTags;
+use Illuminate\Support\Facades\DB;
 use App\Services\ThoughtTagService;
 
 class MainService{
@@ -35,5 +37,32 @@ class MainService{
     public function thoughtTags($thought, $dataTag)
     {
         app(ThoughtTagService::class)->saveThoughtTag($thought, $dataTag);
+    }
+
+    public function loadIndex()
+    {   
+            $page = 1;
+
+            $poems = Poem::select('poems.title', 'poems.content', 'poems.image', 'poems.created_at', 'poems.id',
+                                 'users.name', 'users.id as user_id', 'users.profile_photo_path as user_pic')
+                    ->addSelect(DB::raw('"poem" as class'))
+                    ->leftJoin('users', 'users.id', '=', 'poems.user_id')                
+                    ->where('poems.is_public', 1)
+                    ->with('tags')
+                    ->orderBy('poems.created_at', 'desc');
+
+            $thoughts = Thought::select('thoughts.title', 'thoughts.content','thoughts.image', 'thoughts.created_at', 'thoughts.id',
+                                'users.name', 'users.id as user_id', 'users.profile_photo_path as user_pic')
+                ->addSelect(DB::raw('"thought" as class'))
+                ->leftJoin('users', 'users.id', '=', 'thoughts.user_id')
+                ->where('thoughts.is_public', 1)
+                ->with('tags')
+                ->orderBy('thoughts.created_at', 'desc');
+
+            $results = $poems->union($thoughts)->orderByDesc('created_at')->paginate(10, $page);
+
+            $data = $results->items();
+              
+        return response()->json($data);
     }
 }
