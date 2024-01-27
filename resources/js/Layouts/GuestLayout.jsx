@@ -1,12 +1,24 @@
-
-
-import NavBar from '@/Components/Main/NavBar';
 import Footer from '@/Components/Main/Foot';
 import Vision from '@/Components/Main/Vision';
 import TopButton from '@/Components/TopButton'; 
-import { Parallax } from 'react-parallax';
-export default function Guest({ children, auth }) {
+import { useState, useEffect } from 'react';
+import $ from 'jquery';
 
+
+export default function Guest({ children, auth }) {
+ 
+    const [firstMargin, setFirstMargin] = useState(0);
+
+    useEffect(() => {
+      
+        
+        let height = $('#vision').height() + $('nav').height(); 
+
+        setFirstMargin(height);
+
+       
+ 
+    }, []);
 
 
     return (
@@ -15,7 +27,7 @@ export default function Guest({ children, auth }) {
             <div className="shadow-md pt-0" style={{background: 'linear-gradient(to bottom, black 30%, white 30%)'}}>
           
                 <Vision  auth={auth}/>  
-               <div id='mainChild'>
+               <div id='mainChild' style={{marginTop: firstMargin, transition: 'margin-top 0.3s ease'}}>
                 {children}
                </div> 
             </div>

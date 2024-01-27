@@ -52,26 +52,10 @@ const redirect = (url) =>{
   window.location.href = url;
 
 }
-const [scrollHeight, setScrollHeight] = useState(margin);
-
-useEffect(() => {
-  const handleScroll = () => {
-    const scrollPos = window.scrollY;
-    const newHeight = Math.max(100, 256 - scrollPos);
-
-    setScrollHeight(newHeight);
-  };
-
-  window.addEventListener('scroll', handleScroll);
-
-  return () => {
-    window.removeEventListener('scroll', handleScroll);
-  };
-}, []);
 
   return (
     <> 
-      <NavContainer   >
+      <NavContainer style={{top: margin, zIndex : '500', transition: 'top 0.3s ease'}} className='fixed' >
         
         <a  className='self-center float-left'// onClick={handleClick}
            href='/'
@@ -97,7 +81,7 @@ useEffect(() => {
               <input  type="search"  placeholder="Search" className="form-control w-full input-search" aria-label="Search" style={{display: 'inline'}}/>
               <button className='btn-search'>
               <FontAwesomeIcon icon={faSearch} />
-                {/* <img src="../img/assets/lupa.png" alt="search" /> */}
+
                 </button> 
             </form>
           </div>   
