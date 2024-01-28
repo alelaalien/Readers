@@ -7,7 +7,6 @@ import { useForm } from '@inertiajs/react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faHome, faSearch } from '@fortawesome/free-solid-svg-icons';
 import Register from '../Register';
-import $ from 'jquery'; 
 
 function Navbar({auth, margin}) {
 

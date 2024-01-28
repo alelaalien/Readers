@@ -7,7 +7,7 @@ const Vision = ({auth}) => {
   useEffect(() => {
     const handleScroll = () => {
             const scrollPos = window.scrollY;
-            const newHeight = Math.max(100, 256 - scrollPos);
+            const newHeight = Math.max(78, 256 - scrollPos);
             $('#mainChild').css('margin-top' , newHeight + $('nav').height())
             setScrollHeight(newHeight); 
     };

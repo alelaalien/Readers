@@ -11,7 +11,7 @@ export default function PoemIndex({poems, tags, auth})
     const [poemsList, setPoemsList] = useState(poems.data); 
     const [page, setPage] = useState(2); 
     const [loading, setLoading] = useState(false);
-    
+    const [classScroll, setClassScroll] = useState('hidden');
     const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content'); 
     const headerOptions =  {
             'Content-Type' : 'application/json',
@@ -44,6 +44,7 @@ useEffect(() => {
       ) {
         
         fetchData();  
+        setClassScroll('visible')
       }
     };
 
@@ -98,7 +99,7 @@ useEffect(() => {
                         {
                             poemsList.map(element=> 
                             ( 
-                            <OnePoem key={`one-poem-${element.id}`} poem={element}  onClickFromParent={handleClickFromChild}/>)
+                            <OnePoem  classAttr={classScroll}  key={`one-poem-${element.id}`} poem={element}  onClickFromParent={handleClickFromChild}/>)
                             ) 
                         } 
                         </div> 
