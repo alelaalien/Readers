@@ -2,6 +2,19 @@
 @tailwind components;
 @tailwind utilities;
 
+.mcard{
+  -webkit-box-shadow: 0px 0px 7px 7px rgba(224,224,224,1);
+-moz-box-shadow: 0px 0px 7px 7px rgba(224,224,224,1);
+box-shadow: 0px 0px 7px 7px rgba(224,224,224,1);
+}
+.mcard img{
+  width: 100px;
+  height: 100px;
+  min-width: 100px;
+  min-height: 100px;
+  border-radius: 50%;
+  align-self: end;
+}
 .notViewed{
   margin-left: 200%;
 }
